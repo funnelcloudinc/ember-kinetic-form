@@ -1,0 +1,8 @@
+<label>
+  <input
+      type="checkbox"
+      checked={{value}}
+      onclick={{action "toggle"}}>
+  {{field.title}}
+  {{#if field.required}}*{{/if}}
+</label>
