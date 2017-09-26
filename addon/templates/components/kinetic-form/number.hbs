@@ -1,0 +1,9 @@
+<label>
+  {{field.title}}
+  {{#if field.required}}*{{/if}}
+</label>
+<input
+    type="number"
+    value={{value}}
+    onchange={{action update value="target.value"}}
+    oninput={{action update value="target.value"}}>
