@@ -8,5 +8,6 @@ export default KineticFormComponent.extend({
   numberComponent: 'semantic-ui-kinetic-form/number',
   booleanComponent: 'semantic-ui-kinetic-form/boolean',
   radiosComponent: 'semantic-ui-kinetic-form/radios',
-  textareaComponent: 'semantic-ui-kinetic-form/textarea'
+  textareaComponent: 'semantic-ui-kinetic-form/textarea',
+  selectComponent: 'semantic-ui-kinetic-form/select'
 });
