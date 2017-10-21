@@ -1,0 +1,9 @@
+{{#if showErrors}}
+  {{component errorComponent errors=changeset.errors}}
+{{/if}}
+
+{{#component formComponent title=definition.schema.title isInvalid=changeset.isInvalid onSubmit=(action "submit")}}
+  {{#each properties as |field|}}
+    {{component field.componentName field=field error=(get changeset.error field.key) value=(get changeset field.key) update=(action "updateProperty" field.key)}}
+  {{/each}}
+{{/component}}

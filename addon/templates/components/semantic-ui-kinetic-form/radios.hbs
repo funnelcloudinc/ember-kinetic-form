@@ -1,0 +1,14 @@
+<div class="middle aligned content">
+  <div class="field {{if error 'error'}} {{if field.required 'required'}}">
+    <label>{{field.title}}</label>
+    <div class="ui fluid buttons">
+      <button class="ui inverted red {{if value 'active'}} button" {{action update true}}>
+        <i class="warning icon"></i>{{onLabel}}
+      </button>
+      <div class="or"></div>
+      <button class="ui inverted green {{if notValue 'active'}} button" {{action update false}}>
+        <i class="check icon"></i>{{offLabel}}
+      </button>
+    </div>
+  </div>
+</div>

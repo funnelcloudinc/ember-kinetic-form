@@ -1,4 +1,5 @@
 import resolver from './helpers/resolver';
+import 'ember-sinon-qunit/test-support/test';
 import {
   setResolver
 } from 'ember-qunit';

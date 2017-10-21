@@ -1,0 +1,10 @@
+<div class="middle aligned content">
+  <div class="field {{if error 'error'}} {{if field.required 'required'}}">
+    <label>{{field.title}}</label>
+    <input
+        type="text"
+        value={{value}}
+        onchange={{action update value="target.value"}}
+        oninput={{action update value="target.value"}}>
+  </div>
+</div>
