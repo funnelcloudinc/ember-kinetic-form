@@ -2,6 +2,7 @@ import KineticFormComponent from './kinetic-form';
 
 export default KineticFormComponent.extend({
   classNames: ['semantic-ui-kinetic-form'],
+  loadingComponent: 'semantic-ui-kinetic-form/loading',
   errorComponent: 'semantic-ui-kinetic-form/errors',
   formComponent: 'semantic-ui-kinetic-form/form',
   stringComponent: 'semantic-ui-kinetic-form/string',

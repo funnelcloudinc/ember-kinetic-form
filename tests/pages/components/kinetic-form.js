@@ -14,6 +14,7 @@ import { KineticFormTextarea } from './kinetic-form/textarea';
 export const KinenticForm = {
   scope: '.kinetic-form',
   form: KineticFormForm,
+  loading: {scope: '.kinetic-form--loading'},
   errorsSection: KineticFormErrors,
   booleanField: KineticFormBoolean,
   numberField: KineticFormNumber,

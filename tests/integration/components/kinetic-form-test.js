@@ -6,8 +6,13 @@ import hbs from 'htmlbars-inline-precompile';
 import page from '../../pages/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import isChangeset from 'ember-changeset/utils/is-changeset';
+// import { PromiseObject } from 'ember-data';
 
-const { get, set, run } = Ember;
+const {
+  get, set, run,
+  // PromiseProxyMixin,
+  RSVP: { Promise }
+} = Ember;
 
 moduleForComponent('kinetic-form', 'Integration | Component | kinetic form', {
   integration: true,
@@ -164,3 +169,20 @@ test('calls onSubmit action when user submits the form', function () {
   run(() => page.submit());
   sinon.assert.calledWith(get(this, 'submitSpy'), sinon.match(isChangeset, 'Changeset'));
 });
+
+test('shows loading component when passed a promise', function (assert) {
+  let promise = new Promise(() => {});
+  set(this, 'testDefinition', promise);
+  page.render(hbs`
+    {{kinetic-form
+        definition=testDefinition
+        model=testModel
+        onSubmit=(action submitSpy)}}
+  `);
+  assert.ok(page.loading.isVisible, 'expected loading component to be visible');
+  assert.ok(page.form.isHidden, 'expected form component to be hidden');
+});
+
+// test('shows loading component when passed a pending ember-data relationship', function (assert) {});
+
+// test('shows loading component when passed a PromiseProxyMixin', function (assert) {});
