@@ -5,7 +5,12 @@ import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
 
 const {
-  Component, get, set, computed, assign, A
+  Component,
+  get,
+  set,
+  computed,
+  assign,
+  A
 } = Ember;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
