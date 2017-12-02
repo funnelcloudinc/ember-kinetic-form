@@ -20,6 +20,7 @@ export default Component.extend({
   formComponent: 'kinetic-form/form',
   stringComponent: 'kinetic-form/string',
   numberComponent: 'kinetic-form/number',
+  integerComponent: 'kinetic-form/number',
   booleanComponent: 'kinetic-form/boolean',
   radiosComponent: 'kinetic-form/radios',
   textareaComponent: 'kinetic-form/textarea',
