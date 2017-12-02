@@ -23,6 +23,7 @@ export default Component.extend({
   booleanComponent: 'kinetic-form/boolean',
   radiosComponent: 'kinetic-form/radios',
   textareaComponent: 'kinetic-form/textarea',
+  selectComponent: 'kinetic-form/select',
 
   validators: computed('properties.@each.required', {
     get() {
