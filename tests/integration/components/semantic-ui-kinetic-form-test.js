@@ -7,7 +7,12 @@ import page from '../../pages/components/semantic-ui-kinetic-form';
 import Changeset from 'ember-changeset';
 import isChangeset from 'ember-changeset/utils/is-changeset';
 
-const { get, set, run } = Ember;
+const {
+  get, set, run,
+  ObjectProxy,
+  PromiseProxyMixin,
+  RSVP: { Promise }
+} = Ember;
 
 moduleForComponent('semantic-ui-kinetic-form', 'Integration | Component | semantic ui kinetic form', {
   integration: true,
@@ -163,4 +168,33 @@ test('calls onSubmit action when user submits the form', function () {
   `);
   run(() => page.submit());
   sinon.assert.calledWith(get(this, 'submitSpy'), sinon.match(isChangeset, 'Changeset'));
+});
+
+test('shows loading component when passed a promise', function (assert) {
+  let promise = new Promise(() => {});
+  set(this, 'testDefinition', promise);
+  page.render(hbs`
+    {{semantic-ui-kinetic-form
+        definition=testDefinition
+        model=testModel
+        onSubmit=(action submitSpy)}}
+  `);
+  assert.ok(page.loading.isVisible, 'expected loading component to be visible');
+  assert.ok(page.form.isHidden, 'expected form component to be hidden');
+});
+
+test('shows loading component when passed a PromiseProxyMixin', function (assert) {
+  let proxy = ObjectProxy.extend(PromiseProxyMixin, {
+    promise: new Promise(() => {})
+  });
+  let promise = proxy.create();
+  set(this, 'testDefinition', promise);
+  page.render(hbs`
+    {{semantic-ui-kinetic-form
+        definition=testDefinition
+        model=testModel
+        onSubmit=(action submitSpy)}}
+  `);
+  assert.ok(page.loading.isVisible, 'expected loading component to be visible');
+  assert.ok(page.form.isHidden, 'expected form component to be hidden');
 });

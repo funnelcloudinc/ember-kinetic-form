@@ -5,10 +5,20 @@ import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
 
 const {
-  Component, get, set, computed, assign, A
+  Component,
+  get,
+  set,
+  computed,
+  assign,
+  A,
+  RSVP: { resolve },
+  ObjectProxy,
+  PromiseProxyMixin
 } = Ember;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
+
+const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
 export default Component.extend({
   layout,
@@ -16,6 +26,7 @@ export default Component.extend({
 
   showErrors: false,
 
+  loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
   formComponent: 'kinetic-form/form',
   stringComponent: 'kinetic-form/string',
@@ -47,10 +58,17 @@ export default Component.extend({
     }
   }),
 
-  properties: computed('definition.{schema,form}', {
+  decoratedDefinition: computed('definition', {
     get() {
-      let schema = get(this, 'definition.schema') || {};
-      let form = A(get(this, 'definition.form') || []);
+      let promise = resolve(get(this, 'definition'));
+      return DefinitionDecorator.create({promise});
+    }
+  }),
+
+  properties: computed('decoratedDefinition.{schema,form}', {
+    get() {
+      let schema = get(this, 'decoratedDefinition.schema') || {};
+      let form = A(get(this, 'decoratedDefinition.form') || []);
       let required = A(get(schema, 'required') || []);
       let properties = get(schema, 'properties') || {};
 
