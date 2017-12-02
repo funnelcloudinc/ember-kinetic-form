@@ -6,11 +6,11 @@ import hbs from 'htmlbars-inline-precompile';
 import page from '../../pages/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import isChangeset from 'ember-changeset/utils/is-changeset';
-// import { PromiseObject } from 'ember-data';
 
 const {
   get, set, run,
-  // PromiseProxyMixin,
+  ObjectProxy,
+  PromiseProxyMixin,
   RSVP: { Promise }
 } = Ember;
 
@@ -183,6 +183,18 @@ test('shows loading component when passed a promise', function (assert) {
   assert.ok(page.form.isHidden, 'expected form component to be hidden');
 });
 
-// test('shows loading component when passed a pending ember-data relationship', function (assert) {});
-
-// test('shows loading component when passed a PromiseProxyMixin', function (assert) {});
+test('shows loading component when passed a PromiseProxyMixin', function (assert) {
+  let proxy = ObjectProxy.extend(PromiseProxyMixin, {
+    promise: new Promise(() => {})
+  });
+  let promise = proxy.create();
+  set(this, 'testDefinition', promise);
+  page.render(hbs`
+    {{kinetic-form
+        definition=testDefinition
+        model=testModel
+        onSubmit=(action submitSpy)}}
+  `);
+  assert.ok(page.loading.isVisible, 'expected loading component to be visible');
+  assert.ok(page.form.isHidden, 'expected form component to be hidden');
+});
