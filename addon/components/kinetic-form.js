@@ -10,6 +10,7 @@ const {
   set,
   computed,
   assign,
+  run: { debounce },
   A,
   RSVP: { resolve },
   ObjectProxy,
@@ -17,6 +18,7 @@ const {
 } = Ember;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
+const DEFAULT_AUTO_SUBMIT_DELAY = 700;
 
 const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
@@ -25,6 +27,8 @@ export default Component.extend({
   classNames: ['kinetic-form'],
 
   showErrors: false,
+  autoSubmit: true,
+  autoSubmitDelay: DEFAULT_AUTO_SUBMIT_DELAY,
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -123,6 +127,9 @@ export default Component.extend({
   actions: {
     updateProperty(key, value) {
       set(this, `changeset.${key}`, value);
+      if (!get(this, 'autoSubmit')) { return; }
+      let delay = get(this, 'autoSubmitDelay');
+      debounce(this, this.submitForm, delay);
     },
 
     submit() {

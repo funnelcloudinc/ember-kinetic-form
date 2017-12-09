@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import EmObject from 'ember-object';
 import { moduleForComponent, test } from 'ember-qunit';
+import { default as settled } from 'ember-test-helpers/wait';
 import sinon from 'sinon';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../pages/components/kinetic-form';
@@ -162,11 +163,33 @@ test('calls onSubmit action when user submits the form', function () {
   set(this, 'testDefinition', {});
   page.render(hbs`
     {{kinetic-form
+        autoSubmit=false
         definition=testDefinition
         model=testModel
         onSubmit=(action submitSpy)}}
   `);
   run(() => page.submit());
+  sinon.assert.calledWith(get(this, 'submitSpy'), sinon.match(isChangeset, 'Changeset'));
+});
+
+test('calls onSubmit action when user updates the form', async function () {
+  set(this, 'testDefinition', {
+    schema: {
+      properties: {
+        fieldA: {type: 'string'},
+      }
+    }
+  });
+  page.render(hbs`
+    {{kinetic-form
+        autoSubmit=true
+        autoSubmitDelay=0
+        definition=testDefinition
+        model=testModel
+        onSubmit=(action submitSpy)}}
+  `);
+  run(() => page.stringField.enterText('foobar'));
+  await settled();
   sinon.assert.calledWith(get(this, 'submitSpy'), sinon.match(isChangeset, 'Changeset'));
 });
 
