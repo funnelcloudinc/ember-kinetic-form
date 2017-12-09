@@ -108,21 +108,25 @@ export default Component.extend({
       .catch(() => set(this, 'showErrors', true));
   },
 
+  submitForm() {
+    let changeset = get(this, 'changeset');
+    this.validateForm(changeset).then(() => {
+      if (get(changeset, 'isInvalid')) {
+        set(this, 'showErrors', true);
+        return;
+      }
+      set(this, 'showErrors', false);
+      get(this, 'onSubmit')(changeset);
+    });
+  },
+
   actions: {
     updateProperty(key, value) {
       set(this, `changeset.${key}`, value);
     },
 
     submit() {
-      let changeset = get(this, 'changeset');
-      this.validateForm(changeset).then(() => {
-        if (get(changeset, 'isInvalid')) {
-          set(this, 'showErrors', true);
-          return;
-        }
-        set(this, 'showErrors', false);
-        get(this, 'onSubmit')(changeset);
-      });
+      this.submitForm();
     }
   }
 });
