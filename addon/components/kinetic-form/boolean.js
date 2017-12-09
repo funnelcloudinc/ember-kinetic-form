@@ -12,6 +12,7 @@ export default Component.extend({
   actions: {
     toggle() {
       get(this, 'update')(!get(this, 'value'));
+      return false;
     }
   }
 });
