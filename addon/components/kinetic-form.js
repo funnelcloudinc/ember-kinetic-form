@@ -10,6 +10,7 @@ const {
   set,
   computed,
   assign,
+  run: { debounce },
   A,
   RSVP: { resolve },
   ObjectProxy,
@@ -17,6 +18,7 @@ const {
 } = Ember;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
+const DEFAULT_AUTO_SUBMIT_DELAY = 700;
 
 const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
@@ -25,6 +27,8 @@ export default Component.extend({
   classNames: ['kinetic-form'],
 
   showErrors: false,
+  autoSubmit: true,
+  autoSubmitDelay: DEFAULT_AUTO_SUBMIT_DELAY,
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -108,21 +112,28 @@ export default Component.extend({
       .catch(() => set(this, 'showErrors', true));
   },
 
+  submitForm() {
+    let changeset = get(this, 'changeset');
+    this.validateForm(changeset).then(() => {
+      if (get(changeset, 'isInvalid')) {
+        set(this, 'showErrors', true);
+        return;
+      }
+      set(this, 'showErrors', false);
+      get(this, 'onSubmit')(changeset);
+    });
+  },
+
   actions: {
     updateProperty(key, value) {
       set(this, `changeset.${key}`, value);
+      if (!get(this, 'autoSubmit')) { return; }
+      let delay = get(this, 'autoSubmitDelay');
+      debounce(this, this.submitForm, delay);
     },
 
     submit() {
-      let changeset = get(this, 'changeset');
-      this.validateForm(changeset).then(() => {
-        if (get(changeset, 'isInvalid')) {
-          set(this, 'showErrors', true);
-          return;
-        }
-        set(this, 'showErrors', false);
-        get(this, 'onSubmit')(changeset);
-      });
+      this.submitForm();
     }
   }
 });
