@@ -40,6 +40,7 @@ export default Component.extend({
   radiosComponent: 'kinetic-form/radios',
   textareaComponent: 'kinetic-form/textarea',
   selectComponent: 'kinetic-form/select',
+  imageComponent: 'kinetic-form/image',
 
   validators: computed('properties.@each.required', {
     get() {
