@@ -1,0 +1,20 @@
+<h2 id="title" class="ui header">
+  Huge sample set
+  <div class="sub header">({{sampleSize}} form options)</div>
+</h2>
+
+<div class="ui top attached tabular menu">
+  <button class="{{if semanticUI 'active'}} item clickable" {{action (mut semanticUI) true}}>
+    Semantic UI Kinetic Form
+  </button>
+  <button class="{{unless semanticUI 'active'}} item clickable" {{action (mut semanticUI) false}}>
+    Kinetic Form
+  </button>
+</div>
+
+<div class="ui bottom attached active tab segment">
+  {{component (if semanticUI 'semantic-ui-kinetic-form' 'kinetic-form')
+      definition=sampleDefinition
+      model=sampleModel
+      onSubmit=(action "sendToServer")}}
+</div>
