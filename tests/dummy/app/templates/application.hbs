@@ -1,15 +1,10 @@
-<h2 id="title">Welcome to Ember</h2>
+<h2 id="ui header title">Welcome to Ember Kinetic Forms</h2>
 
-{{kinetic-form
-    definition=sampleDefinition
-    model=sampleModel
-    onSubmit=(action "sendToServer")}}
+{{link-to "Generic Example" "kinetic-form" class="ui button"}}
+{{link-to "Semantic-UI Example" "semantic-ui-kinetic-form" class="ui button"}}
 
 <hr>
 
-{{semantic-ui-kinetic-form
-    definition=sampleDefinition
-    model=sampleModel
-    onSubmit=(action "sendToServer")}}
-
-{{outlet}}
+<article class="ui section">
+  {{outlet}}
+</article>
