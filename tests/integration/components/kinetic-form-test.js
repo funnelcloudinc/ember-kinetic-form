@@ -163,7 +163,6 @@ test('calls onSubmit action when user submits the form', function () {
   set(this, 'testDefinition', {});
   page.render(hbs`
     {{kinetic-form
-        autoSubmit=false
         definition=testDefinition
         model=testModel
         onSubmit=(action submitSpy)}}
@@ -172,7 +171,27 @@ test('calls onSubmit action when user submits the form', function () {
   sinon.assert.calledWith(get(this, 'submitSpy'), sinon.match(isChangeset, 'Changeset'));
 });
 
-test('calls onSubmit action when user updates the form', async function () {
+test('does not call onSubmit action when user submits the form but is invalid', function () {
+  set(this, 'testDefinition', {
+    schema: {
+      required: ['fieldA'],
+      properties: {
+        fieldA: {type: 'string'},
+      }
+    }
+  });
+  page.render(hbs`
+    {{kinetic-form
+        definition=testDefinition
+        model=testModel
+        onSubmit=(action submitSpy)}}
+  `);
+  run(() => page.submit());
+  sinon.assert.notCalled(get(this, 'submitSpy'));
+});
+
+test('calls onUpdate action when user updates the form', async function () {
+  set(this, 'updateSpy', sinon.spy());
   set(this, 'testDefinition', {
     schema: {
       properties: {
@@ -182,15 +201,38 @@ test('calls onSubmit action when user updates the form', async function () {
   });
   page.render(hbs`
     {{kinetic-form
-        autoSubmit=true
-        autoSubmitDelay=0
+        updateDebounceDelay=0
         definition=testDefinition
         model=testModel
+        onUpdate=(action updateSpy)
         onSubmit=(action submitSpy)}}
   `);
   run(() => page.stringField.enterText('foobar'));
   await settled();
-  sinon.assert.calledWith(get(this, 'submitSpy'), sinon.match(isChangeset, 'Changeset'));
+  sinon.assert.calledWith(get(this, 'updateSpy'), sinon.match(isChangeset, 'Changeset'));
+});
+
+test('does not call onUpdate action when user updates the form but is invalid', async function () {
+  set(this, 'updateSpy', sinon.spy());
+  set(this, 'testDefinition', {
+    schema: {
+      required: ['fieldA'],
+      properties: {
+        fieldA: {type: 'string'},
+      }
+    }
+  });
+  page.render(hbs`
+    {{kinetic-form
+        updateDebounceDelay=0
+        definition=testDefinition
+        model=testModel
+        onUpdate=(action updateSpy)
+        onSubmit=(action submitSpy)}}
+  `);
+  run(() => page.stringField.enterText(''));
+  await settled();
+  sinon.assert.notCalled(get(this, 'updateSpy'));
 });
 
 test('shows loading component when passed a promise', function (assert) {
