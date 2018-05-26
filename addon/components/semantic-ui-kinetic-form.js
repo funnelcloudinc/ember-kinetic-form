@@ -5,6 +5,7 @@ export default KineticFormComponent.extend({
   loadingComponent: 'semantic-ui-kinetic-form/loading',
   errorComponent: 'semantic-ui-kinetic-form/errors',
   formComponent: 'semantic-ui-kinetic-form/form',
+  sectionComponent: 'semantic-ui-kinetic-form/section',
   stringComponent: 'semantic-ui-kinetic-form/string',
   numberComponent: 'semantic-ui-kinetic-form/number',
   integerComponent: 'semantic-ui-kinetic-form/number',
