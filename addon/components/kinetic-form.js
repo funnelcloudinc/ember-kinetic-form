@@ -33,6 +33,7 @@ export default Component.extend({
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
   formComponent: 'kinetic-form/form',
+  sectionComponent: 'kinetic-form/section',
   stringComponent: 'kinetic-form/string',
   numberComponent: 'kinetic-form/number',
   integerComponent: 'kinetic-form/number',
