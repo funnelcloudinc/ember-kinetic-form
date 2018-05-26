@@ -40,34 +40,38 @@ export default Controller.extend({
           "default": false
         },
         "6": {
+          "title": "Breaking Assembly Section",
+          "type": "section"
+        },
+        "7": {
           "title": "Braking Assembly",
           "description": "Verify cylinders are in good working condition (no leaks)",
           "type": "boolean",
           "default": false
         },
-        "7": {
+        "8": {
           "title": "Braking Assembly (Lower Brake)",
           "description": "Measure and record in millimeters the brake pad and brake disk thickness",
           "type": "string"
         },
-        "8": {
+        "9": {
           "title": "Braking Assembly (Middle Brake)",
           "description": "Measure and record in millimeters the brake pad and brake disk thickness",
           "type": "string"
         },
-        "9": {
+        "10": {
           "title": "Braking Assembly (Top Brake)",
           "description": "Measure and record in millimeters the brake pad and brake disk thickness",
           "type": "string"
         },
-        "10": {
+        "11": {
           "title": "Comments",
           "type": "string"
         }
       }
     },
     "form": [{
-      "key": "10",
+      "key": "11",
       "type": "textarea"
     }]
   },
