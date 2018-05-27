@@ -100,6 +100,30 @@ module('Unit | Schema Form Parser', function() {
     ]);
   });
 
+  test('parses form elements with items list', function() {
+    let subject = SchemaFormParser.create({
+      schema: {
+        type: 'object',
+        properties: {
+          '1': { type: 'boolean', title: 'foo' },
+          '2': { type: 'boolean', title: 'bar' },
+          '3': { type: 'boolean', title: 'baz' }
+        }
+      },
+      form: ["1", { type: 'section', items: ['2', '3'] }]
+    });
+    sinon.assert.match(subject.get('elements'), [
+      sinon.match({ key: '1', type: 'boolean', title: 'foo' }),
+      sinon.match({
+        type: 'section',
+        items: [
+          sinon.match({ key: '2', type: 'boolean', title: 'bar' }),
+          sinon.match({ key: '3', type: 'boolean', title: 'baz' })
+        ]
+      })
+    ]);
+  });
+
   test('parses backwards compatible form data', function() {
     let subject = SchemaFormParser.create({
       schema: {

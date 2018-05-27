@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 const {
   A,
+  Error: EmberError,
   Object: EmberObject,
   assert,
   assign,
@@ -13,6 +14,11 @@ const {
   typeOf
 } = Ember;
 
+function PropertiesUnaccountedForError(name) {
+  EmberError.call(this, `Property '${name}' was not accounted for in the 'form' array.`);
+}
+PropertiesUnaccountedForError.prototype = Object.create(EmberError.prototype);
+
 export function normalizeFormElement(element, properties, requiredKeys = []) {
   let required = A(requiredKeys).includes(element.key);
   let property = assign({}, properties[element.key]);
@@ -20,15 +26,29 @@ export function normalizeFormElement(element, properties, requiredKeys = []) {
 }
 
 export function* normalizeFormElements(form, properties, requiredKeys) {
+  function* mapProperties(items) {
+    for (let item of items) {
+      let element = typeOf(item) === 'string' ? { key: item } : item;
+      yield normalizeFormElement(element, properties, requiredKeys);
+      if (element.key) { propertiesAccountedFor[element.key] = true; }
+    }
+  }
+  let propertiesAccountedFor = {};
   let propertyNames = Object.keys(properties);
   if (isEmpty(form)) { form = ['*']; }
   for (let item of form) {
     if (item === '*') {
-      yield* propertyNames
-        .map(key => normalizeFormElement({ key }, properties, requiredKeys));
+      yield* mapProperties(propertyNames);
+    } else if (item.items) {
+      let items = [...mapProperties(item.items)];
+      yield* mapProperties([assign({}, item, {items})]);
     } else {
-      let element = typeOf(item) === 'string' ? { key: item } : item;
-      yield normalizeFormElement(element, properties, requiredKeys);
+      yield* mapProperties([item]);
+    }
+  }
+  for (let name of propertyNames) {
+    if (!propertiesAccountedFor[name]) {
+      throw new PropertiesUnaccountedForError(name);
     }
   }
 }
@@ -60,10 +80,12 @@ export default EmberObject.extend({
       let form = get(this, 'form');
       let properties = get(this, 'properties');
       let requiredKeys = get(this, 'required');
-      let elements = [...normalizeFormElements(form, properties, requiredKeys)];
-      return elements.length < Object.keys(properties).length
-        ? [...normalizeLegacyFormElements(form, properties, requiredKeys)]
-        : elements;
+      try {
+        return [...normalizeFormElements(form, properties, requiredKeys)];
+      } catch (error) {
+        if (!(error instanceof PropertiesUnaccountedForError)) { throw error; }
+        return [...normalizeLegacyFormElements(form, properties, requiredKeys)];
+      }
     }
   }),
 
