@@ -19,17 +19,18 @@ function PropertiesUnaccountedForError(name) {
 }
 PropertiesUnaccountedForError.prototype = Object.create(EmberError.prototype);
 
-export function normalizeFormElement(element, properties, requiredKeys = []) {
+export function normalizeFormElement(element, properties, requiredKeys, lookup) {
   let required = A(requiredKeys).includes(element.key);
   let property = assign({}, properties[element.key]);
-  return assign(property, element, { required });
+  let componentName = lookup(element.type || property.type);
+  return assign(property, element, { required, componentName });
 }
 
-export function* normalizeFormElements(form, properties, requiredKeys) {
+export function* normalizeFormElements(form, properties, requiredKeys, lookup) {
   function* mapProperties(items) {
     for (let item of items) {
       let element = typeOf(item) === 'string' ? { key: item } : item;
-      yield normalizeFormElement(element, properties, requiredKeys);
+      yield normalizeFormElement(element, properties, requiredKeys, lookup);
       if (element.key) { propertiesAccountedFor[element.key] = true; }
     }
   }
@@ -53,7 +54,7 @@ export function* normalizeFormElements(form, properties, requiredKeys) {
   }
 }
 
-export function* normalizeLegacyFormElements(form, properties, requiredKeys) {
+export function* normalizeLegacyFormElements(form, properties, requiredKeys, lookup) {
   deprecate(
     `When using the 'form' array all properties need to be accounted for.`,
     false,
@@ -65,7 +66,7 @@ export function* normalizeLegacyFormElements(form, properties, requiredKeys) {
   }
   for (let key of Object.keys(properties)) {
     let element = formOverrides[key] || { key };
-    yield normalizeFormElement(element, properties, requiredKeys);
+    yield normalizeFormElement(element, properties, requiredKeys, lookup);
   }
 }
 
@@ -79,12 +80,13 @@ export default EmberObject.extend({
     get() {
       let form = get(this, 'form');
       let properties = get(this, 'properties');
-      let requiredKeys = get(this, 'required');
+      let requiredKeys = get(this, 'required') || [];
+      let lookup = get(this, 'lookupComponentName') || function() {};
       try {
-        return [...normalizeFormElements(form, properties, requiredKeys)];
+        return [...normalizeFormElements(form, properties, requiredKeys, lookup)];
       } catch (error) {
         if (!(error instanceof PropertiesUnaccountedForError)) { throw error; }
-        return [...normalizeLegacyFormElements(form, properties, requiredKeys)];
+        return [...normalizeLegacyFormElements(form, properties, requiredKeys, lookup)];
       }
     }
   }),

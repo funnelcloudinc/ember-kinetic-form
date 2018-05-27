@@ -11,6 +11,7 @@ const {
   set,
   computed,
   isNone,
+  computed: { reads },
   run: { debounce },
   A,
   RSVP: { all, resolve },
@@ -40,6 +41,8 @@ export default Component.extend({
   radiosComponent: 'kinetic-form/radios',
   textareaComponent: 'kinetic-form/textarea',
   selectComponent: 'kinetic-form/select',
+
+  properties: reads('schemaParser.elements'),
 
   validators: computed('properties.@each.required', {
     get() {
@@ -71,20 +74,13 @@ export default Component.extend({
 
   schemaParser: computed('decoratedDefinition.{schema,form}', {
     get() {
-      let schema = get(this, 'decoratedDefinition.schema') || {};
-      let form = A(get(this, 'decoratedDefinition.form') || []);
-      return SchemaFormParser.create({ schema, form });
-    }
-  }),
-
-  properties: computed('schemaParser.elements.[]', {
-    get() {
-      let elements = get(this, 'schemaParser.elements');
-      for (let element of elements) {
-        element.componentName = get(this, `${element.type}Component`)
+      const lookupComponentName = (type) => {
+        return get(this, `${type}Component`)
           || get(this, DEFAULT_COMPONENT_NAME_PROP);
       }
-      return elements;
+      let schema = get(this, 'decoratedDefinition.schema') || {};
+      let form = A(get(this, 'decoratedDefinition.form') || []);
+      return SchemaFormParser.create({ schema, form, lookupComponentName });
     }
   }),
 

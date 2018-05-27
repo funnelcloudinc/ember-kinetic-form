@@ -124,22 +124,42 @@ module('Unit | Schema Form Parser', function() {
     ]);
   });
 
-  test('parses backwards compatible form data', function() {
+  test('Adds componentName properties using lookup function', function() {
     let subject = SchemaFormParser.create({
+      lookupComponentName: (type) => `${type}-test-component-name`,
       schema: {
         type: 'object',
         properties: {
           '1': { type: 'boolean', title: 'foo' },
+          '2': { type: 'string', title: 'bar' },
+          '3': { type: 'number', title: 'baz' }
+        }
+      }
+    });
+    sinon.assert.match(subject.get('elements'), [
+      sinon.match({ key: '1', type: 'boolean', title: 'foo', componentName: 'boolean-test-component-name' }),
+      sinon.match({ key: '2', type: 'string', title: 'bar', componentName: 'string-test-component-name'}),
+      sinon.match({ key: '3', type: 'number', title: 'baz', componentName: 'number-test-component-name'})
+    ]);
+  });
+
+  test('parses backwards compatible form data', function() {
+    let subject = SchemaFormParser.create({
+      lookupComponentName: (type) => `${type}-test-component-name`,
+      schema: {
+        type: 'object',
+        properties: {
+          '1': { type: 'string', title: 'foo' },
           '2': { type: 'boolean', title: 'bar' },
-          '3': { type: 'boolean', title: 'baz' }
+          '3': { type: 'number', title: 'baz' }
         }
       },
       form: [{ key: '2', type: 'radio' }]
     });
     sinon.assert.match(subject.get('elements'), [
-      sinon.match({ key: '1', type: 'boolean', title: 'foo' }),
-      sinon.match({ key: '2', type: 'radio', title: 'bar' }),
-      sinon.match({ key: '3', type: 'boolean', title: 'baz' })
+      sinon.match({ key: '1', type: 'string', title: 'foo', componentName: 'string-test-component-name' }),
+      sinon.match({ key: '2', type: 'radio', title: 'bar', componentName: 'radio-test-component-name' }),
+      sinon.match({ key: '3', type: 'number', title: 'baz', componentName: 'number-test-component-name' })
     ]);
   });
 });
