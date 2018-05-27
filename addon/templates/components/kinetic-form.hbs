@@ -7,7 +7,9 @@
 {{else}}
   {{#component formComponent changeset=changeset title=decoratedDefinition.schema.title isInvalid=changeset.isInvalid onSubmit=(action "submit")}}
     {{#each properties as |field|}}
-      {{component field.componentName field=field error=(get changeset.error field.key) value=(get changeset field.key) update=(action "updateProperty" field.key)}}
+      {{#component field.componentName field=field changeset=changeset error=(get changeset.error field.key) value=(get changeset field.key) update=(action "updateProperty" field.key) as |item|}}
+        {{component item.componentName field=item error=(get changeset.error item.key) value=(get changeset item.key) update=(action "updateProperty" item.key)}}
+      {{/component}}
     {{/each}}
   {{/component}}
 {{/if}}
