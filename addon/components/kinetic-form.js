@@ -3,13 +3,13 @@ import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
+import SchemaFormParser from '../-schema-form-parser';
 
 const {
   Component,
   get,
   set,
   computed,
-  assign,
   run: { debounce },
   A,
   RSVP: { resolve },
@@ -69,33 +69,22 @@ export default Component.extend({
     }
   }),
 
-  properties: computed('decoratedDefinition.{schema,form}', {
+  schemaParser: computed('decoratedDefinition.{schema,form}', {
     get() {
       let schema = get(this, 'decoratedDefinition.schema') || {};
       let form = A(get(this, 'decoratedDefinition.form') || []);
-      let required = A(get(schema, 'required') || []);
-      let properties = get(schema, 'properties') || {};
+      return SchemaFormParser.create({ schema, form });
+    }
+  }),
 
-      return Object.keys(properties).map(key => {
-        let property = assign({}, properties[key]);
-
-        // form property allows for overriding rendering defaults for a given
-        // field type
-        let formType = form.findBy('key', key);
-        let propertyType = formType ?
-          get(formType, 'type') :
-          get(schema, `properties.${key}.type`);
-        let componentName = get(this, `${propertyType}Component`);
-        if (!componentName) {
-          componentName = get(this, DEFAULT_COMPONENT_NAME_PROP);
-        }
-
-        property.key = key;
-        property.required = required.includes(key);
-        property.type = propertyType;
-        property.componentName = componentName;
-        return property;
-      });
+  properties: computed('schemaParser.elements.[]', {
+    get() {
+      let elements = get(this, 'schemaParser.elements');
+      for (let element of elements) {
+        element.componentName = get(this, `${element.type}Component`)
+          || get(this, DEFAULT_COMPONENT_NAME_PROP);
+      }
+      return elements;
     }
   }),
 
