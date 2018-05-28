@@ -134,6 +134,10 @@ export default Component.extend({
     });
   },
 
+  notifyUpdate() {
+    get(this, 'onUpdate')(get(this, 'changeset'));
+  },
+
   init() {
     this._super(...arguments);
     set(this, '_updatedFields', A());
@@ -149,7 +153,7 @@ export default Component.extend({
         get(this, '_updatedFields').pushObject(key);
         debounce(this, this.validateAndNotifyUpdate, delay);
       } else {
-        get(this, 'onUpdate')(get(this, 'changeset'));
+        debounce(this, this.notifyUpdate, delay); 
       }
     },
 
