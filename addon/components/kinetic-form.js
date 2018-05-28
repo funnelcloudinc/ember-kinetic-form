@@ -10,13 +10,16 @@ const {
   set,
   computed,
   assign,
+  isNone,
+  run: { debounce },
   A,
-  RSVP: { resolve },
+  RSVP: { all, resolve },
   ObjectProxy,
   PromiseProxyMixin
 } = Ember;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
+const DEFAULT_UPDATE_DEBOUNCE_DELAY = 700;
 
 const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
@@ -25,6 +28,7 @@ export default Component.extend({
   classNames: ['kinetic-form'],
 
   showErrors: false,
+  updateDebounceDelay: DEFAULT_UPDATE_DEBOUNCE_DELAY,
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -100,29 +104,51 @@ export default Component.extend({
       .catch(() => { /* Ignore rejection */ });
   },
 
-  validateForm() {
+  validateForm(field) {
     let changeset = get(this, 'changeset');
-    return changeset.validate()
-      .then(() => set(this, 'showErrors', false))
-      .then(() => changeset)
-      .catch(() => set(this, 'showErrors', true));
+    return changeset.validate(field).then(() => {
+      set(this, 'showErrors', false);
+      if (field && isNone(get(changeset, `error.${field}`))) { return true; }
+      if (get(changeset, 'isValid')) { return true; }
+      set(this, 'showErrors', true);
+      return false;
+    });
+  },
+
+  validateAndNotifySubmit() {
+    return this.validateForm().then(isValid => {
+      if (!isValid) { return; }
+      get(this, 'onSubmit')(get(this, 'changeset'));
+    });
+  },
+
+  validateAndNotifyUpdate() {
+    let updatedFields = get(this, '_updatedFields');
+    let validations = updatedFields.uniq().map(field => this.validateForm(field));
+    updatedFields.clear();
+    return all(validations).then(validationResults => {
+      let isValid = validationResults.every(identity => identity);
+      if (!isValid) { return; }
+      return get(this, 'onUpdate')(get(this, 'changeset'));
+    });
+  },
+
+  init() {
+    this._super(...arguments);
+    set(this, '_updatedFields', A());
   },
 
   actions: {
     updateProperty(key, value) {
       set(this, `changeset.${key}`, value);
+      if (!get(this, 'onUpdate')) { return; }
+      let delay = get(this, 'updateDebounceDelay');
+      get(this, '_updatedFields').pushObject(key);
+      debounce(this, this.validateAndNotifyUpdate, delay);
     },
 
     submit() {
-      let changeset = get(this, 'changeset');
-      this.validateForm(changeset).then(() => {
-        if (get(changeset, 'isInvalid')) {
-          set(this, 'showErrors', true);
-          return;
-        }
-        set(this, 'showErrors', false);
-        get(this, 'onSubmit')(changeset);
-      });
+      this.validateAndNotifySubmit();
     }
   }
 });
