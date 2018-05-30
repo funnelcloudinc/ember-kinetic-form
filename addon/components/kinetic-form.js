@@ -29,6 +29,7 @@ export default Component.extend({
 
   showErrors: false,
   updateDebounceDelay: DEFAULT_UPDATE_DEBOUNCE_DELAY,
+  validateOnUpdate: false,
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -133,6 +134,10 @@ export default Component.extend({
     });
   },
 
+  notifyUpdate() {
+    get(this, 'onUpdate')(get(this, 'changeset'));
+  },
+
   init() {
     this._super(...arguments);
     set(this, '_updatedFields', A());
@@ -143,8 +148,13 @@ export default Component.extend({
       set(this, `changeset.${key}`, value);
       if (!get(this, 'onUpdate')) { return; }
       let delay = get(this, 'updateDebounceDelay');
-      get(this, '_updatedFields').pushObject(key);
-      debounce(this, this.validateAndNotifyUpdate, delay);
+      let validate = get(this, 'validateOnUpdate');
+      if (validate) { 
+        get(this, '_updatedFields').pushObject(key);
+        debounce(this, this.validateAndNotifyUpdate, delay);
+      } else {
+        debounce(this, this.notifyUpdate, delay); 
+      }
     },
 
     submit() {
