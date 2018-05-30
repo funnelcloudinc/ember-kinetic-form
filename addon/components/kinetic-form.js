@@ -29,7 +29,6 @@ export default Component.extend({
 
   showErrors: false,
   updateDebounceDelay: DEFAULT_UPDATE_DEBOUNCE_DELAY,
-  validateOnUpdate: false,
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -151,7 +150,6 @@ export default Component.extend({
         return get(this, 'onUpdate')(get(this, 'changeset'), false);
       }
       let delay = get(this, 'updateDebounceDelay');
-      let validate = get(this, 'validateOnUpdate');
       if (validate) { 
         get(this, '_updatedFields').pushObject(key);
         debounce(this, this.validateAndNotifyUpdate, delay);
