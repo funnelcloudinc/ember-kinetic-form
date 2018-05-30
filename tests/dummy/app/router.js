@@ -9,6 +9,7 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('kinetic-form');
   this.route('semantic-ui-kinetic-form');
+  this.route('override-form');
 });
 
 export default Router;
