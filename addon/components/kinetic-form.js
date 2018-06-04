@@ -41,6 +41,7 @@ export default Component.extend({
   radiosComponent: 'kinetic-form/radios',
   textareaComponent: 'kinetic-form/textarea',
   selectComponent: 'kinetic-form/select',
+  sectionComponent: 'kinetic-form/section',
 
   properties: reads('schemaParser.elements'),
 
