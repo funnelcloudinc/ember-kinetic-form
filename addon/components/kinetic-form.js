@@ -3,14 +3,15 @@ import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
+import SchemaFormParser from '../-schema-form-parser';
 
 const {
   Component,
   get,
   set,
   computed,
-  assign,
   isNone,
+  computed: { reads },
   run: { debounce },
   A,
   RSVP: { all, resolve },
@@ -40,6 +41,9 @@ export default Component.extend({
   radiosComponent: 'kinetic-form/radios',
   textareaComponent: 'kinetic-form/textarea',
   selectComponent: 'kinetic-form/select',
+  sectionComponent: 'kinetic-form/section',
+
+  properties: reads('schemaParser.elements'),
 
   validators: computed('properties.@each.required', {
     get() {
@@ -69,33 +73,15 @@ export default Component.extend({
     }
   }),
 
-  properties: computed('decoratedDefinition.{schema,form}', {
+  schemaParser: computed('decoratedDefinition.{schema,form}', {
     get() {
+      const lookupComponentName = (type) => {
+        return get(this, `${type}Component`)
+          || get(this, DEFAULT_COMPONENT_NAME_PROP);
+      }
       let schema = get(this, 'decoratedDefinition.schema') || {};
       let form = A(get(this, 'decoratedDefinition.form') || []);
-      let required = A(get(schema, 'required') || []);
-      let properties = get(schema, 'properties') || {};
-
-      return Object.keys(properties).map(key => {
-        let property = assign({}, properties[key]);
-
-        // form property allows for overriding rendering defaults for a given
-        // field type
-        let formType = form.findBy('key', key);
-        let propertyType = formType ?
-          get(formType, 'type') :
-          get(schema, `properties.${key}.type`);
-        let componentName = get(this, `${propertyType}Component`);
-        if (!componentName) {
-          componentName = get(this, DEFAULT_COMPONENT_NAME_PROP);
-        }
-
-        property.key = key;
-        property.required = required.includes(key);
-        property.type = propertyType;
-        property.componentName = componentName;
-        return property;
-      });
+      return SchemaFormParser.create({ schema, form, lookupComponentName });
     }
   }),
 
@@ -154,11 +140,11 @@ export default Component.extend({
         return get(this, 'onUpdate')(get(this, 'changeset'), false);
       }
       let delay = get(this, 'updateDebounceDelay');
-      if (validate) { 
+      if (validate) {
         get(this, '_updatedFields').pushObject(key);
         debounce(this, this.validateAndNotifyUpdate, delay);
       } else {
-        debounce(this, this.notifyUpdate, delay); 
+        debounce(this, this.notifyUpdate, delay);
       }
     },
 
