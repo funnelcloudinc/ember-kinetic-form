@@ -10,6 +10,9 @@ export default Controller.extend({
   actions: {
     sendToServer() {
       alert('fake sent');
+    },
+    update() {
+      console.log('update fired');
     }
   }
 });

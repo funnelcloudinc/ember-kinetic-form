@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import KineticFormTextareaComponent from '../kinetic-form/textarea';
 import layout from '../../templates/components/semantic-ui-kinetic-form/textarea';
 
-export default Ember.Component.extend({
+export default KineticFormTextareaComponent.extend({
   layout,
   classNames: ['semantic-ui-kinetic-form--textarea', 'item']
 });

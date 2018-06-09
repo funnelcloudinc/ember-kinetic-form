@@ -31,6 +31,7 @@ moduleForComponent('semantic-ui-kinetic-form', 'Integration | Component | semant
 test('renders different form fields from definition schema', function (assert) {
   set(this, 'testDefinition', {
     schema: {
+      type: 'object',
       properties: {
         fieldA: {type: 'boolean'},
         fieldB: {type: 'number'},
@@ -55,7 +56,7 @@ test('renders different form fields from definition schema', function (assert) {
 
 test('render string field as default type', function (assert) {
   set(this, 'testDefinition', {
-    schema: {properties: {fieldA: {type: 'foobar'}}}
+    schema: {type: 'object', properties: {fieldA: {type: 'foobar'}}}
   });
   page.render(hbs`
     {{semantic-ui-kinetic-form
@@ -69,6 +70,7 @@ test('render string field as default type', function (assert) {
 test('can override components', function (assert) {
   set(this, 'testDefinition', {
     schema: {
+      type: 'object',
       properties: {
         fieldA: {type: 'number'},
         fieldB: {type: 'foobar'}
@@ -90,7 +92,7 @@ test('can override components', function (assert) {
 test('shows errors section when changeset has errors', function (assert) {
   let mockChangeset = new Changeset({});
   mockChangeset.addError('base', 'test-error');
-  set(this, 'testDefinition', {});
+  set(this, 'testDefinition', {schema: {type: 'object', properties: {}}});
   set(this, 'mockChangeset', mockChangeset);
   page.render(hbs`
     {{semantic-ui-kinetic-form
@@ -106,6 +108,7 @@ test('shows errors section when changeset has errors', function (assert) {
 test('overrides field type from form section of definition', function (assert) {
   set(this, 'testDefinition', {
     schema: {
+      type: 'object',
       properties: {
         fieldA: {type: 'boolean'}
       }
@@ -130,6 +133,7 @@ test('overrides field type from form section of definition', function (assert) {
 test('marks fields as required when listed in required section of schema', function (assert) {
   set(this, 'testDefinition', {
     schema: {
+      type: 'object',
       required: ['fieldB'],
       properties: {
         fieldA: {type: 'boolean'},
@@ -148,7 +152,7 @@ test('marks fields as required when listed in required section of schema', funct
 });
 
 test('displays a form title from title section of schema', function (assert) {
-  set(this, 'testDefinition', {schema: {title: 'test-title'}});
+  set(this, 'testDefinition', {schema: {type: 'object', title: 'test-title', properties: {}}});
   page.render(hbs`
     {{semantic-ui-kinetic-form
         definition=testDefinition
@@ -159,7 +163,7 @@ test('displays a form title from title section of schema', function (assert) {
 });
 
 test('calls onSubmit action when user submits the form', function () {
-  set(this, 'testDefinition', {});
+  set(this, 'testDefinition', {schema: {type: 'object', properties: {}}});
   page.render(hbs`
     {{semantic-ui-kinetic-form
         definition=testDefinition

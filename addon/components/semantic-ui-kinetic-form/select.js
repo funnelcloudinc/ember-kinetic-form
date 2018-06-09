@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import KineticFormSelectComponent from '../kinetic-form/select';
 import layout from '../../templates/components/semantic-ui-kinetic-form/select';
 
-export default Ember.Component.extend({
+export default KineticFormSelectComponent.extend({
   layout,
-  classNames: ['semantic-ui-kinetic-form--select'],
+  classNames: ['semantic-ui-kinetic-form--select']
 });

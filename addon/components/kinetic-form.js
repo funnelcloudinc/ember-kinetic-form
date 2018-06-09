@@ -3,14 +3,15 @@ import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
+import SchemaFormParser from '../-schema-form-parser';
 
 const {
   Component,
   get,
   set,
   computed,
-  assign,
   isNone,
+  computed: { reads },
   run: { debounce },
   A,
   RSVP: { all, resolve },
@@ -40,6 +41,9 @@ export default Component.extend({
   radiosComponent: 'kinetic-form/radios',
   textareaComponent: 'kinetic-form/textarea',
   selectComponent: 'kinetic-form/select',
+  sectionComponent: 'kinetic-form/section',
+
+  properties: reads('schemaParser.elements'),
 
   validators: computed('properties.@each.required', {
     get() {
@@ -69,33 +73,15 @@ export default Component.extend({
     }
   }),
 
-  properties: computed('decoratedDefinition.{schema,form}', {
+  schemaParser: computed('decoratedDefinition.{schema,form}', {
     get() {
+      const lookupComponentName = (type) => {
+        return get(this, `${type}Component`)
+          || get(this, DEFAULT_COMPONENT_NAME_PROP);
+      }
       let schema = get(this, 'decoratedDefinition.schema') || {};
       let form = A(get(this, 'decoratedDefinition.form') || []);
-      let required = A(get(schema, 'required') || []);
-      let properties = get(schema, 'properties') || {};
-
-      return Object.keys(properties).map(key => {
-        let property = assign({}, properties[key]);
-
-        // form property allows for overriding rendering defaults for a given
-        // field type
-        let formType = form.findBy('key', key);
-        let propertyType = formType ?
-          get(formType, 'type') :
-          get(schema, `properties.${key}.type`);
-        let componentName = get(this, `${propertyType}Component`);
-        if (!componentName) {
-          componentName = get(this, DEFAULT_COMPONENT_NAME_PROP);
-        }
-
-        property.key = key;
-        property.required = required.includes(key);
-        property.type = propertyType;
-        property.componentName = componentName;
-        return property;
-      });
+      return SchemaFormParser.create({ schema, form, lookupComponentName });
     }
   }),
 
@@ -118,7 +104,7 @@ export default Component.extend({
   validateAndNotifySubmit() {
     return this.validateForm().then(isValid => {
       if (!isValid) { return; }
-      get(this, 'onSubmit')(get(this, 'changeset'));
+      get(this, 'onSubmit')(get(this, 'changeset'), true);
     });
   },
 
@@ -129,8 +115,12 @@ export default Component.extend({
     return all(validations).then(validationResults => {
       let isValid = validationResults.every(identity => identity);
       if (!isValid) { return; }
-      return get(this, 'onUpdate')(get(this, 'changeset'));
+      return get(this, 'onUpdate')(get(this, 'changeset'), true);
     });
+  },
+
+  notifyUpdate() {
+    get(this, 'onUpdate')(get(this, 'changeset'));
   },
 
   init() {
@@ -139,16 +129,31 @@ export default Component.extend({
   },
 
   actions: {
-    updateProperty(key, value) {
+    updateProperty(key, value, validate = true) {
       set(this, `changeset.${key}`, value);
+      // HACK: ember-changeset will not set a property that is not valid. This is causing some bogus ui state so we need to manually set the property
+      // https://github.com/poteto/ember-changeset/blob/353d0e5822efca3104a2b147e47608bc0176e440/addon/index.js#L650
+      set(this, `changeset._content.${key}`, value);
+      // END HACK
       if (!get(this, 'onUpdate')) { return; }
+      if (!validate) {
+        return get(this, 'onUpdate')(get(this, 'changeset'), false);
+      }
       let delay = get(this, 'updateDebounceDelay');
-      get(this, '_updatedFields').pushObject(key);
-      debounce(this, this.validateAndNotifyUpdate, delay);
+      if (validate) {
+        get(this, '_updatedFields').pushObject(key);
+        debounce(this, this.validateAndNotifyUpdate, delay);
+      } else {
+        debounce(this, this.notifyUpdate, delay);
+      }
     },
 
-    submit() {
-      this.validateAndNotifySubmit();
+    submit(validate = true) {
+      if (validate) {
+        return this.validateAndNotifySubmit();
+      } else {
+        return get(this, 'onSubmit')(get(this, 'changeset'), false);
+      }
     }
   }
 });
