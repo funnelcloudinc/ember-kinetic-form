@@ -12,7 +12,7 @@ const {
   computed,
   isNone,
   computed: { reads },
-  run: { debounce },
+  run: { debounce, cancel },
   A,
   RSVP: { all, resolve },
   ObjectProxy,
@@ -129,6 +129,12 @@ export default Component.extend({
     set(this, '_updatedFields', A());
   },
 
+  willDestroyElement() {
+    this._super(...arguments);
+    let debounced = get(this, '_debounced');
+    if (debounced) cancel(debounced);
+  },
+
   actions: {
     updateProperty(key, value, validate = true) {
       set(this, `changeset.${key}`, value);
@@ -143,12 +149,14 @@ export default Component.extend({
         return get(this, 'onUpdate')(get(this, 'changeset'), false);
       }
       let delay = get(this, 'updateDebounceDelay');
+      let debounced;
       if (validate) {
         get(this, '_updatedFields').pushObject(key);
-        debounce(this, this.validateAndNotifyUpdate, delay);
+        debounced = debounce(this, this.validateAndNotifyUpdate, delay);
       } else {
-        debounce(this, this.notifyUpdate, delay);
+        debounced = debounce(this, this.notifyUpdate, delay);
       }
+      set(this, '_debounced', debounced);
     },
 
     submit(validate = true) {
