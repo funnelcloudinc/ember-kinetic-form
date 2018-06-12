@@ -49,9 +49,20 @@ export default Component.extend({
     get() {
       let validators = {};
       let properties = get(this, 'properties');
-      for (let property of properties) {
-        validators[property.key] = validatorsFor(property);
+
+      function buildValidators(items = []) {
+        for (let item of items) {
+          if (item.items) {
+            buildValidators(item.items);
+          }
+          if (!item.key) {
+            continue;
+          }
+          validators[item.key] = validatorsFor(item);
+        }
       }
+
+      buildValidators(properties);
       return validators;
     }
   }),
@@ -61,7 +72,6 @@ export default Component.extend({
       let model = get(this, 'model');
       let validations = get(this, 'validators');
       let changeset = new Changeset(model, lookupValidator(validations), validations);
-      this.initChangesetInvalidState(changeset);
       return changeset;
     }
   }),
@@ -69,33 +79,31 @@ export default Component.extend({
   decoratedDefinition: computed('definition', {
     get() {
       let promise = resolve(get(this, 'definition'));
-      return DefinitionDecorator.create({promise});
+      return DefinitionDecorator.create({ promise });
     }
   }),
 
   schemaParser: computed('decoratedDefinition.{schema,form}', {
     get() {
-      const lookupComponentName = (type) => {
-        return get(this, `${type}Component`)
-          || get(this, DEFAULT_COMPONENT_NAME_PROP);
-      }
+      const lookupComponentName = type => {
+        return get(this, `${type}Component`) || get(this, DEFAULT_COMPONENT_NAME_PROP);
+      };
       let schema = get(this, 'decoratedDefinition.schema') || {};
       let form = A(get(this, 'decoratedDefinition.form') || []);
       return SchemaFormParser.create({ schema, form, lookupComponentName });
     }
   }),
 
-  initChangesetInvalidState(changeset) {
-    return changeset.validate()
-      .catch(() => { /* Ignore rejection */ });
-  },
-
   validateForm(field) {
     let changeset = get(this, 'changeset');
     return changeset.validate(field).then(() => {
       set(this, 'showErrors', false);
-      if (field && isNone(get(changeset, `error.${field}`))) { return true; }
-      if (get(changeset, 'isValid')) { return true; }
+      if (field && isNone(get(changeset, `error.${field}`))) {
+        return true;
+      }
+      if (get(changeset, 'isValid')) {
+        return true;
+      }
       set(this, 'showErrors', true);
       return false;
     });
@@ -103,23 +111,33 @@ export default Component.extend({
 
   validateAndNotifySubmit() {
     return this.validateForm().then(isValid => {
-      if (!isValid) { return; }
+      if (!isValid) {
+        return;
+      }
       get(this, 'onSubmit')(get(this, 'changeset'), true);
     });
   },
 
   validateAndNotifyUpdate() {
+    if (this.isDestroyed) {
+      return;
+    }
     let updatedFields = get(this, '_updatedFields');
     let validations = updatedFields.uniq().map(field => this.validateForm(field));
     updatedFields.clear();
     return all(validations).then(validationResults => {
       let isValid = validationResults.every(identity => identity);
-      if (!isValid) { return; }
+      if (!isValid) {
+        return;
+      }
       return get(this, 'onUpdate')(get(this, 'changeset'), true);
     });
   },
 
   notifyUpdate() {
+    if (this.isDestroyed) {
+      return;
+    }
     get(this, 'onUpdate')(get(this, 'changeset'));
   },
 
@@ -135,7 +153,9 @@ export default Component.extend({
       // https://github.com/poteto/ember-changeset/blob/353d0e5822efca3104a2b147e47608bc0176e440/addon/index.js#L650
       set(this, `changeset._content.${key}`, value);
       // END HACK
-      if (!get(this, 'onUpdate')) { return; }
+      if (!get(this, 'onUpdate')) {
+        return;
+      }
       if (!validate) {
         return get(this, 'onUpdate')(get(this, 'changeset'), false);
       }
