@@ -12,7 +12,7 @@ const {
   computed,
   isNone,
   computed: { reads },
-  run: { debounce, cancel },
+  run: { debounce },
   A,
   RSVP: { all, resolve },
   ObjectProxy,
@@ -119,6 +119,9 @@ export default Component.extend({
   },
 
   validateAndNotifyUpdate() {
+    if (this.isDestroyed) {
+      return;
+    }
     let updatedFields = get(this, '_updatedFields');
     let validations = updatedFields.uniq().map(field => this.validateForm(field));
     updatedFields.clear();
@@ -132,18 +135,15 @@ export default Component.extend({
   },
 
   notifyUpdate() {
+    if (this.isDestroyed) {
+      return;
+    }
     get(this, 'onUpdate')(get(this, 'changeset'));
   },
 
   init() {
     this._super(...arguments);
     set(this, '_updatedFields', A());
-  },
-
-  willDestroyElement() {
-    this._super(...arguments);
-    let debounced = get(this, '_debounced');
-    if (debounced) cancel(debounced);
   },
 
   actions: {
@@ -160,14 +160,12 @@ export default Component.extend({
         return get(this, 'onUpdate')(get(this, 'changeset'), false);
       }
       let delay = get(this, 'updateDebounceDelay');
-      let debounced;
       if (validate) {
         get(this, '_updatedFields').pushObject(key);
-        debounced = debounce(this, this.validateAndNotifyUpdate, delay);
+        debounce(this, this.validateAndNotifyUpdate, delay);
       } else {
-        debounced = debounce(this, this.notifyUpdate, delay);
+        debounce(this, this.notifyUpdate, delay);
       }
-      set(this, '_debounced', debounced);
     },
 
     submit(validate = true) {
