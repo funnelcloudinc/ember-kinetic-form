@@ -49,17 +49,20 @@ export default Component.extend({
     get() {
       let validators = {};
       let properties = get(this, 'properties');
-      for (let property of properties) {
-        // FIXME: probably better to do this in the `schemaParser` but this is quick fix to get schema props to validate when they are inside a section
-        if (property.type === 'section') {
-          let sectionItems = property.items || [];
-          sectionItems.forEach(sectionItem => {
-            validators[sectionItem.key] = validatorsFor(sectionItem);
-          });
-        } else {
-          validators[property.key] = validatorsFor(property);
+
+      function buildValidators(items = []) {
+        for (let item of items) {
+          if (item.items) {
+            buildValidators(item.items);
+          }
+          if (!item.key) {
+            continue;
+          }
+          validators[item.key] = validatorsFor(item);
         }
       }
+
+      buildValidators(properties);
       return validators;
     }
   }),
