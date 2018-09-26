@@ -90,7 +90,17 @@ export default Component.extend({
       };
       let schema = get(this, 'decoratedDefinition.schema') || {};
       let form = A(get(this, 'decoratedDefinition.form') || []);
-      return SchemaFormParser.create({ schema, form, lookupComponentName });
+      let existingSchemaParser = get(this, '_schemaParser');
+
+      if (existingSchemaParser && !Object.keys(schema).length && !form.length) {
+        return existingSchemaParser;
+      }
+
+      let schemaFormParser = SchemaFormParser.create({ schema, form, lookupComponentName });
+
+      set(this, '_schemaParser', schemaFormParser);
+
+      return schemaFormParser;
     }
   }),
 
