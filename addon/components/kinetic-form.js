@@ -29,6 +29,7 @@ export default Component.extend({
   classNames: ['kinetic-form'],
 
   showErrors: false,
+  readOnly: false,
   updateDebounceDelay: DEFAULT_UPDATE_DEBOUNCE_DELAY,
 
   loadingComponent: 'kinetic-form/loading',
@@ -90,7 +91,17 @@ export default Component.extend({
       };
       let schema = get(this, 'decoratedDefinition.schema') || {};
       let form = A(get(this, 'decoratedDefinition.form') || []);
-      return SchemaFormParser.create({ schema, form, lookupComponentName });
+      let existingSchemaParser = get(this, '_schemaParser');
+
+      if (existingSchemaParser && !Object.keys(schema).length && !form.length) {
+        return existingSchemaParser;
+      }
+
+      let schemaFormParser = SchemaFormParser.create({ schema, form, lookupComponentName });
+
+      set(this, '_schemaParser', schemaFormParser);
+
+      return schemaFormParser;
     }
   }),
 
@@ -148,6 +159,7 @@ export default Component.extend({
 
   actions: {
     updateProperty(key, value, validate = true) {
+      if (get(this, 'readOnly')) return;
       set(this, `changeset.${key}`, value);
       // HACK: ember-changeset will not set a property that is not valid. This is causing some bogus ui state so we need to manually set the property
       // https://github.com/poteto/ember-changeset/blob/353d0e5822efca3104a2b147e47608bc0176e440/addon/index.js#L650
@@ -169,6 +181,7 @@ export default Component.extend({
     },
 
     submit(validate = true) {
+      if (get(this, 'readOnly')) return;
       if (validate) {
         return this.validateAndNotifySubmit();
       } else {
