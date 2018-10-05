@@ -5,22 +5,11 @@ import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
 import SchemaFormParser from '../-schema-form-parser';
 
-const {
-  Component,
-  get,
-  set,
-  computed,
-  isNone,
-  computed: { reads },
-  run: { debounce },
-  A,
-  RSVP: { all, resolve },
-  ObjectProxy,
-  PromiseProxyMixin
-} = Ember;
+const { Component, get, set, isNone, computed, A, RSVP, ObjectProxy, PromiseProxyMixin, typeOf } = Ember;
+const { all, resolve } = RSVP;
+const { reads } = computed;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
-const DEFAULT_UPDATE_DEBOUNCE_DELAY = 700;
 
 const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
@@ -30,7 +19,6 @@ export default Component.extend({
 
   showErrors: false,
   readOnly: false,
-  updateDebounceDelay: DEFAULT_UPDATE_DEBOUNCE_DELAY,
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -157,27 +145,20 @@ export default Component.extend({
     set(this, '_updatedFields', A());
   },
 
+
+
   actions: {
     updateProperty(key, value, validate = true) {
       if (get(this, 'readOnly')) return;
+
+      // START HACK
       set(this, `changeset.${key}`, value);
-      // HACK: ember-changeset will not set a property that is not valid. This is causing some bogus ui state so we need to manually set the property
+      // ember-changeset will not set a property that is not valid. This is causing some bogus ui state so we need to manually set the property
       // https://github.com/poteto/ember-changeset/blob/353d0e5822efca3104a2b147e47608bc0176e440/addon/index.js#L650
       set(this, `changeset._content.${key}`, value);
       // END HACK
-      if (!get(this, 'onUpdate')) {
-        return;
-      }
-      if (!validate) {
-        return get(this, 'onUpdate')(get(this, 'changeset'), false);
-      }
-      let delay = get(this, 'updateDebounceDelay');
-      if (validate) {
-        get(this, '_updatedFields').pushObject(key);
-        debounce(this, this.validateAndNotifyUpdate, delay);
-      } else {
-        debounce(this, this.notifyUpdate, delay);
-      }
+
+      this.notifyUpdate();
     },
 
     submit(validate = true) {
