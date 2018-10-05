@@ -61,6 +61,7 @@ export default Component.extend({
       let model = get(this, 'model');
       let validations = get(this, 'validators');
       let changeset = new Changeset(model, lookupValidator(validations), validations);
+      if (Object.keys(model).length) changeset.validate();
       return changeset;
     }
   }),
