@@ -111,33 +111,14 @@ export default Component.extend({
 
   validateAndNotifySubmit() {
     return this.validateForm().then(isValid => {
-      if (!isValid) {
-        return;
-      }
+      if (!isValid) return;
       get(this, 'onSubmit')(get(this, 'changeset'), true);
     });
   },
 
-  validateAndNotifyUpdate() {
-    if (this.isDestroyed) {
-      return;
-    }
-    let updatedFields = get(this, '_updatedFields');
-    let validations = updatedFields.uniq().map(field => this.validateForm(field));
-    updatedFields.clear();
-    return all(validations).then(validationResults => {
-      let isValid = validationResults.every(identity => identity);
-      if (!isValid) {
-        return;
-      }
-      return get(this, 'onUpdate')(get(this, 'changeset'), true);
-    });
-  },
-
-  notifyUpdate() {
-    if (this.isDestroyed) {
-      return;
-    }
+  notifyUpdate(key) {
+    if (this.isDestroyed) return;
+    get(this, 'changeset').validate();
     get(this, 'onUpdate')(get(this, 'changeset'));
   },
 
