@@ -8,7 +8,8 @@
   {{#component formComponent 
     changeset=changeset 
     title=decoratedDefinition.schema.title 
-    isInvalid=changeset.isInvalid 
+    isInvalid=isInvalid
+    hasPendingChanges=hasPendingChanges 
     onSubmit=(action "submit")
     readOnly=readOnly
   }}

@@ -4,6 +4,8 @@
 
 {{#unless readOnly}}
   <fieldset>
-    <button type="submit" disabled={{isInvalid}}>Submit</button>
+    <button type="submit" disabled={{if (or isInvalid hasPendingChanges) true}}>
+      {{if hasPendingChanges 'Auto-saving...' 'Submit'}}
+    </button>
   </fieldset>
 {{/unless}}
