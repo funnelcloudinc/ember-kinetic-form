@@ -37,6 +37,7 @@
     "ember-cli-shims": "^1.1.0",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-uglify": "^1.2.0",
+    "ember-concurrency": "^1.0.0",
     "ember-disable-prototype-extensions": "^1.1.2",
     "ember-export-application-global": "^2.0.0",
     "ember-load-initializers": "^1.0.0",
@@ -44,6 +45,7 @@
     "ember-sinon": "^1.0.1",
     "ember-sinon-qunit": "^2.0.0",
     "ember-source": "~2.14.1",
+    "ember-truth-helpers": "^2.1.0",
     "loader.js": "^4.2.3",
     "semantic-ui-ember": "^2.0.1"
   },
