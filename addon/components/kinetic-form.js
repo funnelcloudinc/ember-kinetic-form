@@ -35,6 +35,9 @@ export default Component.extend({
 
   properties: reads('schemaParser.elements'),
 
+  isInvalid: alias('changeset.isInvalid'),
+  hasPendingChanges: alias('notifyUpdateTask.isRunning'),
+
   validators: computed('properties.@each.required', {
     get() {
       let validators = {};
