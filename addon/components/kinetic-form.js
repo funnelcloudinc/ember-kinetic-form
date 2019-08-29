@@ -1,26 +1,16 @@
 import Ember from 'ember';
+import { task } from 'ember-concurrency';
 import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
 import SchemaFormParser from '../-schema-form-parser';
 
-const {
-  Component,
-  get,
-  set,
-  computed,
-  isNone,
-  computed: { reads },
-  run: { debounce },
-  A,
-  RSVP: { all, resolve },
-  ObjectProxy,
-  PromiseProxyMixin
-} = Ember;
+const { Component, get, set, isNone, computed, A, RSVP, ObjectProxy, PromiseProxyMixin, typeOf } = Ember;
+const { all, resolve } = RSVP;
+const { reads, alias } = computed;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
-const DEFAULT_UPDATE_DEBOUNCE_DELAY = 700;
 
 const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
@@ -30,7 +20,6 @@ export default Component.extend({
 
   showErrors: false,
   readOnly: false,
-  updateDebounceDelay: DEFAULT_UPDATE_DEBOUNCE_DELAY,
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
