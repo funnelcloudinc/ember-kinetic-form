@@ -117,31 +117,27 @@ export default Component.extend({
       if (!isValid) {
         return;
       }
-      get(this, 'onSubmit')(get(this, 'changeset'), true);
+      get(this, 'onSubmit')(get(this, 'changeset'), [], true);
     });
   },
 
-  validateAndNotifyUpdate() {
-    if (this.isDestroyed) {
-      return;
-    }
-    let updatedFields = get(this, '_updatedFields');
-    let validations = updatedFields.uniq().map(field => this.validateForm(field));
-    updatedFields.clear();
-    return all(validations).then(validationResults => {
-      let isValid = validationResults.every(identity => identity);
-      if (!isValid) {
-        return;
-      }
-      return get(this, 'onUpdate')(get(this, 'changeset'), true);
-    });
-  },
+  notifyUpdateTask: task(function*({ key, value }) {
+    if (this.isDestroyed) return;
+    let { changeset, changes } = this.handleFormChanges({ key, value });
+    return yield get(this, 'onUpdate')(changeset, changes);
+  }),
 
-  notifyUpdate() {
-    if (this.isDestroyed) {
-      return;
-    }
-    get(this, 'onUpdate')(get(this, 'changeset'));
+  handleFormChanges({ key, value }) {
+    let changeset = get(this, 'changeset');
+
+    set(changeset, `${key}`, value);
+
+    let changes = [...get(changeset, 'changes')];
+
+    // HACK: ember-changeset will not set a property that is not valid.
+    set(changeset, `_content.${key}`, value);
+
+    return { changeset, changes };
   },
 
   init() {
@@ -150,26 +146,9 @@ export default Component.extend({
   },
 
   actions: {
-    updateProperty(key, value, validate = true) {
+    updateProperty(key, value) {
       if (get(this, 'readOnly')) return;
-      set(this, `changeset.${key}`, value);
-      // HACK: ember-changeset will not set a property that is not valid. This is causing some bogus ui state so we need to manually set the property
-      // https://github.com/poteto/ember-changeset/blob/353d0e5822efca3104a2b147e47608bc0176e440/addon/index.js#L650
-      set(this, `changeset._content.${key}`, value);
-      // END HACK
-      if (!get(this, 'onUpdate')) {
-        return;
-      }
-      if (!validate) {
-        return get(this, 'onUpdate')(get(this, 'changeset'), false);
-      }
-      let delay = get(this, 'updateDebounceDelay');
-      if (validate) {
-        get(this, '_updatedFields').pushObject(key);
-        debounce(this, this.validateAndNotifyUpdate, delay);
-      } else {
-        debounce(this, this.notifyUpdate, delay);
-      }
+      return this.get('notifyUpdateTask').perform({ key, value });
     },
 
     submit(validate = true) {
