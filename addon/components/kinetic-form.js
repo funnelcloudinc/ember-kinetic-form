@@ -1,16 +1,17 @@
 import Ember from 'ember';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
 import SchemaFormParser from '../-schema-form-parser';
 
-const { Component, get, set, isNone, computed, A, RSVP, ObjectProxy, PromiseProxyMixin, typeOf } = Ember;
-const { all, resolve } = RSVP;
+const { Component, get, set, isNone, computed, A, RSVP, ObjectProxy, PromiseProxyMixin } = Ember;
+const { resolve } = RSVP;
 const { reads, alias } = computed;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
+const AUTOSAVE_DELAY = 15000;
 
 const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
@@ -20,6 +21,7 @@ export default Component.extend({
 
   showErrors: false,
   readOnly: false,
+  _changes: [], // internally keep track of changeset changes
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -36,7 +38,7 @@ export default Component.extend({
   properties: reads('schemaParser.elements'),
 
   isInvalid: alias('changeset.isInvalid'),
-  hasPendingChanges: alias('notifyUpdateTask.isRunning'),
+  hasPendingChanges: alias('onUpdateTask.isRunning'),
 
   validators: computed('properties.@each.required', {
     get() {
@@ -64,7 +66,7 @@ export default Component.extend({
     get() {
       let model = get(this, 'model');
       let validations = get(this, 'validators');
-      let changeset = new Changeset(model, lookupValidator(validations), validations);
+      let changeset = new Changeset(model, lookupValidator(validations), validations, { skipValidate: true });
       return changeset;
     }
   }),
@@ -112,33 +114,56 @@ export default Component.extend({
     });
   },
 
-  validateAndNotifySubmit() {
-    return this.validateForm().then(isValid => {
-      if (!isValid) {
-        return;
-      }
-      get(this, 'onSubmit')(get(this, 'changeset'), [], true);
-    });
-  },
-
-  notifyUpdateTask: task(function*({ key, value }) {
-    if (this.isDestroyed) return;
-    let { changeset, changes } = this.handleFormChanges({ key, value });
-    return yield get(this, 'onUpdate')(changeset, changes);
-  }),
-
   handleFormChanges({ key, value }) {
     let changeset = get(this, 'changeset');
 
-    set(changeset, `${key}`, value);
-
-    let changes = [...get(changeset, 'changes')];
-
-    // HACK: ember-changeset will not set a property that is not valid.
-    set(changeset, `_content.${key}`, value);
+    changeset.set(`${key}`, value);
+    let changes = [...changeset.get('changes')]; // keep a copy of changes before force setting below (force setting `_content clobbers the changesets changes)
+    this.set('_changes', changes); // keep track of changes at the class level so we can pass them back when submitting the form
+    // changeset.set(`_content.${key}`, value); // force set changeset `_content` key (allows for saving invalid forms, ie, incomplete forms)
 
     return { changeset, changes };
   },
+
+  validateAndNotifySubmitTask: task(function*({ changeset, changes }) {
+    let isValid = yield this.validateForm();
+    if (!isValid) return;
+    return yield this.get('onSubmit')(changeset, changes, true);
+  }),
+
+  notifyUpdateTask: task(function*({ key, value }) {
+    if (this.isDestroyed) return;
+    if (this.get('readOnly')) return;
+
+    let { changeset, changes } = this.handleFormChanges({ key, value });
+
+    yield timeout(AUTOSAVE_DELAY);
+
+    return yield this.get('onUpdateTask').perform({ changeset, changes });
+  }).restartable(),
+
+  submitTask: task(function*({ changeset, changes, validate }) {
+    if (this.isDestroyed) return;
+    if (this.get('readOnly')) return;
+
+    this.get('notifyUpdateTask').cancelAll(); // cancel `notifyUpdateTask` when submitting the form
+
+    if (validate) {
+      return yield this.get('validateAndNotifySubmitTask').perform({ changeset, changes });
+    } else {
+      return yield this.get('onSubmitTask').perform({ changeset, changes, complete: false });
+    }
+  }),
+
+  // Wrap `onUpdate` action in a task so we can use the tasks derived state to handle UI state
+  onUpdateTask: task(function*({ changeset, changes }) {
+    return yield get(this, 'onUpdate')(changeset, changes);
+  }),
+
+  // Wrap `onSubmit` action in a task so we can use the tasks derived state to handle UI state
+  onSubmitTask: task(function*({ changeset, changes, complete }) {
+    return yield this.get('onSubmit')(changeset, changes, complete);
+  }),
 
   init() {
     this._super(...arguments);
@@ -147,17 +172,14 @@ export default Component.extend({
 
   actions: {
     updateProperty(key, value) {
-      if (get(this, 'readOnly')) return;
       return this.get('notifyUpdateTask').perform({ key, value });
     },
 
     submit(validate = true) {
-      if (get(this, 'readOnly')) return;
-      if (validate) {
-        return this.validateAndNotifySubmit();
-      } else {
-        return get(this, 'onSubmit')(get(this, 'changeset'), false);
-      }
+      let changeset = this.get('changeset');
+      let changes = this.get('_changes');
+
+      return this.get('submitTask').perform({ changeset, changes, validate });
     }
   }
 });
