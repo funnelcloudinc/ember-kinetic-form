@@ -20,7 +20,6 @@ export default Component.extend({
 
   showErrors: false,
   readOnly: false,
-  _changes: [], // internally keep track of changeset changes
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
