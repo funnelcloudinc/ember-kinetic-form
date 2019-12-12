@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
@@ -11,7 +11,6 @@ const { resolve } = RSVP;
 const { reads, alias } = computed;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
-const AUTOSAVE_DELAY = 15000;
 
 const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
