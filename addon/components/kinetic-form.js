@@ -112,54 +112,26 @@ export default Component.extend({
   },
 
   handleFormChanges({ key, value }) {
-    let changeset = get(this, 'changeset');
-
+    let changeset = this.get('changeset');
     changeset.set(`${key}`, value);
-    let changes = [...changeset.get('changes')]; // keep a copy of changes before force setting below (force setting `_content clobbers the changesets changes)
-    this.set('_changes', changes); // keep track of changes at the class level so we can pass them back when submitting the form
-    // changeset.set(`_content.${key}`, value); // force set changeset `_content` key (allows for saving invalid forms, ie, incomplete forms)
-
-    return { changeset, changes };
+    return { changeset };
   },
 
-  validateAndNotifySubmitTask: task(function*({ changeset, changes }) {
-    let isValid = yield this.validateForm();
-    if (!isValid) return;
-    return yield this.get('onSubmit')(changeset, changes, true);
-  }),
-
-  notifyUpdateTask: task(function*({ key, value }) {
-    if (this.isDestroyed) return;
+  submitTask: task(function*({ changeset, validate }) {
     if (this.get('readOnly')) return;
-
-    let { changeset, changes } = this.handleFormChanges({ key, value });
-
-    yield timeout(AUTOSAVE_DELAY);
-
-    return yield this.get('onUpdateTask').perform({ changeset, changes });
-  }).restartable(),
-
-  submitTask: task(function*({ changeset, changes, validate }) {
-    if (this.isDestroyed) return;
-    if (this.get('readOnly')) return;
-
-    this.get('notifyUpdateTask').cancelAll(); // cancel `notifyUpdateTask` when submitting the form
 
     if (validate) {
-      return yield this.get('validateAndNotifySubmitTask').perform({ changeset, changes });
+      let isValid = yield this.validateForm();
+      if (!isValid) return;
+      return yield this.get('onSubmitTask').perform({ changeset, complete: true });
     } else {
-      return yield this.get('onSubmitTask').perform({ changeset, changes, complete: false });
+      return yield this.get('onSubmitTask').perform({ changeset, complete: false });
     }
   }),
 
-  // Wrap `onUpdate` action in a task so we can use the tasks derived state to handle UI state
-  onUpdateTask: task(function*({ changeset, changes }) {
-    return yield get(this, 'onUpdate')(changeset, changes);
-  }),
-
   // Wrap `onSubmit` action in a task so we can use the tasks derived state to handle UI state
-  onSubmitTask: task(function*({ changeset, changes, complete }) {
-    return yield this.get('onSubmit')(changeset, changes, complete);
+  onSubmitTask: task(function*({ changeset, complete }) {
+    return yield this.get('onSubmit')(changeset, complete);
   }),
 
   init() {
@@ -169,14 +141,13 @@ export default Component.extend({
 
   actions: {
     updateProperty(key, value) {
-      return this.get('notifyUpdateTask').perform({ key, value });
+      let { changeset } = this.handleFormChanges({ key, value });
+      return get(this, 'onUpdate')(changeset);
     },
 
     submit(validate = true) {
       let changeset = this.get('changeset');
-      let changes = this.get('_changes');
-
-      return this.get('submitTask').perform({ changeset, changes, validate });
+      return this.get('submitTask').perform({ changeset, validate });
     }
   }
 });
