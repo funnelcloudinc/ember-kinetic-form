@@ -6,8 +6,8 @@
 
 {{#unless readOnly}}
   <div class="actions">
-    <button class="ui positive huge button" type="submit" disabled={{if (or isInvalid hasPendingChanges) true}}>
-      {{if hasPendingChanges 'Auto-saving...' 'Submit'}}
+    <button class="ui positive huge button" type="submit" disabled={{isInvalid}}>
+      Submit
     </button>
   </div>
 {{/unless}}
