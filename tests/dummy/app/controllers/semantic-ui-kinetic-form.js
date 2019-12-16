@@ -1,6 +1,9 @@
 import Ember from 'ember';
 
-const { Controller, computed: { reads } } = Ember;
+const {
+  Controller,
+  computed: { reads }
+} = Ember;
 
 export default Controller.extend({
   sampleDefinition: reads('model'),
@@ -12,7 +15,12 @@ export default Controller.extend({
       alert('fake sent');
     },
     update() {
-      console.log('update fired');
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          console.log('update fired');
+          return resolve();
+        }, 3000);
+      });
     }
   }
 });

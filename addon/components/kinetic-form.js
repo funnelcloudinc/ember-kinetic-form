@@ -1,26 +1,16 @@
 import Ember from 'ember';
+import { task } from 'ember-concurrency';
 import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
 import SchemaFormParser from '../-schema-form-parser';
 
-const {
-  Component,
-  get,
-  set,
-  computed,
-  isNone,
-  computed: { reads },
-  run: { debounce },
-  A,
-  RSVP: { all, resolve },
-  ObjectProxy,
-  PromiseProxyMixin
-} = Ember;
+const { Component, get, set, isNone, computed, A, RSVP, ObjectProxy, PromiseProxyMixin } = Ember;
+const { resolve } = RSVP;
+const { reads, alias } = computed;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
-const DEFAULT_UPDATE_DEBOUNCE_DELAY = 700;
 
 const DefinitionDecorator = ObjectProxy.extend(PromiseProxyMixin);
 
@@ -30,7 +20,6 @@ export default Component.extend({
 
   showErrors: false,
   readOnly: false,
-  updateDebounceDelay: DEFAULT_UPDATE_DEBOUNCE_DELAY,
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -45,6 +34,8 @@ export default Component.extend({
   sectionComponent: 'kinetic-form/section',
 
   properties: reads('schemaParser.elements'),
+
+  isInvalid: alias('changeset.isInvalid'),
 
   validators: computed('properties.@each.required', {
     get() {
@@ -72,7 +63,7 @@ export default Component.extend({
     get() {
       let model = get(this, 'model');
       let validations = get(this, 'validators');
-      let changeset = new Changeset(model, lookupValidator(validations), validations);
+      let changeset = new Changeset(model, lookupValidator(validations), validations, { skipValidate: true });
       return changeset;
     }
   }),
@@ -120,37 +111,28 @@ export default Component.extend({
     });
   },
 
-  validateAndNotifySubmit() {
-    return this.validateForm().then(isValid => {
-      if (!isValid) {
-        return;
-      }
-      get(this, 'onSubmit')(get(this, 'changeset'), true);
-    });
+  handleFormChanges({ key, value }) {
+    let changeset = this.get('changeset');
+    changeset.set(`${key}`, value);
+    return { changeset };
   },
 
-  validateAndNotifyUpdate() {
-    if (this.isDestroyed) {
-      return;
-    }
-    let updatedFields = get(this, '_updatedFields');
-    let validations = updatedFields.uniq().map(field => this.validateForm(field));
-    updatedFields.clear();
-    return all(validations).then(validationResults => {
-      let isValid = validationResults.every(identity => identity);
-      if (!isValid) {
-        return;
-      }
-      return get(this, 'onUpdate')(get(this, 'changeset'), true);
-    });
-  },
+  submitTask: task(function*({ changeset, validate }) {
+    if (this.get('readOnly')) return;
 
-  notifyUpdate() {
-    if (this.isDestroyed) {
-      return;
+    if (validate) {
+      let isValid = yield this.validateForm();
+      if (!isValid) return;
+      return yield this.get('onSubmitTask').perform({ changeset, complete: true });
+    } else {
+      return yield this.get('onSubmitTask').perform({ changeset, complete: false });
     }
-    get(this, 'onUpdate')(get(this, 'changeset'));
-  },
+  }),
+
+  // Wrap `onSubmit` action in a task so we can use the tasks derived state to handle UI state
+  onSubmitTask: task(function*({ changeset, complete }) {
+    return yield this.get('onSubmit')(changeset, complete);
+  }),
 
   init() {
     this._super(...arguments);
@@ -158,35 +140,14 @@ export default Component.extend({
   },
 
   actions: {
-    updateProperty(key, value, validate = true) {
-      if (get(this, 'readOnly')) return;
-      set(this, `changeset.${key}`, value);
-      // HACK: ember-changeset will not set a property that is not valid. This is causing some bogus ui state so we need to manually set the property
-      // https://github.com/poteto/ember-changeset/blob/353d0e5822efca3104a2b147e47608bc0176e440/addon/index.js#L650
-      set(this, `changeset._content.${key}`, value);
-      // END HACK
-      if (!get(this, 'onUpdate')) {
-        return;
-      }
-      if (!validate) {
-        return get(this, 'onUpdate')(get(this, 'changeset'), false);
-      }
-      let delay = get(this, 'updateDebounceDelay');
-      if (validate) {
-        get(this, '_updatedFields').pushObject(key);
-        debounce(this, this.validateAndNotifyUpdate, delay);
-      } else {
-        debounce(this, this.notifyUpdate, delay);
-      }
+    updateProperty(key, value) {
+      let { changeset } = this.handleFormChanges({ key, value });
+      return get(this, 'onUpdate')(changeset);
     },
 
     submit(validate = true) {
-      if (get(this, 'readOnly')) return;
-      if (validate) {
-        return this.validateAndNotifySubmit();
-      } else {
-        return get(this, 'onSubmit')(get(this, 'changeset'), false);
-      }
+      let changeset = this.get('changeset');
+      return this.get('submitTask').perform({ changeset, validate });
     }
   }
 });
