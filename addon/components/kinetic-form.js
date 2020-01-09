@@ -118,8 +118,6 @@ export default Component.extend({
   },
 
   submitTask: task(function*({ changeset, validate }) {
-    if (this.get('readOnly')) return;
-
     if (validate) {
       let isValid = yield this.validateForm();
       if (!isValid) return;
@@ -141,11 +139,13 @@ export default Component.extend({
 
   actions: {
     updateProperty(key, value) {
+      if (this.get('readOnly')) return;
       let { changeset } = this.handleFormChanges({ key, value });
       return get(this, 'onUpdate')(changeset);
     },
 
     submit(validate = true) {
+      if (this.get('readOnly')) return;
       let changeset = this.get('changeset');
       return this.get('submitTask').perform({ changeset, validate });
     }
