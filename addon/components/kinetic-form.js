@@ -145,11 +145,9 @@ export default Component.extend({
     },
 
     submit(validate = true) {
-      //if (this.get('readOnly')) return;
-      //let changeset = this.get('changeset');
-      //return this.get('submitTask').perform({ changeset, validate });
-      alert('ttt');
-      return { foo: 'bar' };
+      if (this.get('readOnly')) return;
+      let changeset = this.get('changeset');
+      return this.get('submitTask').perform({ changeset, validate });
     }
   }
 });
