@@ -1,0 +1,13 @@
+<div class="middle aligned content">
+  <div class="field {{if error 'error'}} {{if field.required 'required'}}">
+    <label>{{field.title}}</label>
+    <div class="ui big fluid basic icon buttons">
+      <div class="ui {{if (eq value true) 'active'}} button" {{action update true}}>
+        <i class="{{if (eq value true) 'green'}} check icon big"></i>
+      </div>
+      <div class="ui {{if (eq value false) 'active'}} button" {{action update false}}>
+        <i class="{{if (eq value false) 'red'}} close icon big"></i>
+      </div>
+    </div>
+  </div>
+</div>
