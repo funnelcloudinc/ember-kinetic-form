@@ -33,6 +33,7 @@ export default Component.extend({
   selectComponent: 'kinetic-form/select',
   sectionComponent: 'kinetic-form/section',
   passfailComponent: 'kinetic-form/passfail',
+  instructionsComponent: 'kinetic-form/instructions',
 
   properties: reads('schemaParser.elements'),
 

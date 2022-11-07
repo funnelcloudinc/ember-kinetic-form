@@ -14,4 +14,5 @@ export default KineticFormComponent.extend({
   selectComponent: 'semantic-ui-kinetic-form/select',
   sectionComponent: 'kinetic-form/section',
   passfailComponent: 'semantic-ui-kinetic-form/passfail',
+  instructionsComponent: 'semantic-ui-kinetic-form/instructions',
 });
