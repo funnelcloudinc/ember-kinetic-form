@@ -32,7 +32,7 @@
     "ember-cli-eslint": "^3.0.0",
     "ember-cli-htmlbars-inline-precompile": "^0.4.3",
     "ember-cli-inject-live-reload": "^1.4.1",
-    "ember-cli-page-object": "^1.11.0",
+    "ember-cli-page-object": "^1.17.11",
     "ember-cli-qunit": "^4.0.0",
     "ember-cli-shims": "^1.1.0",
     "ember-cli-sri": "^2.1.0",
@@ -48,7 +48,7 @@
     "ember-source": "~2.14.1",
     "ember-truth-helpers": "^2.1.0",
     "loader.js": "^4.2.3",
-    "semantic-ui-ember": "^2.0.1"
+    "semantic-ui-ember": "^2.1.0"
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"
