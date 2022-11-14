@@ -12,5 +12,8 @@ export default KineticFormComponent.extend({
   radiosComponent: 'semantic-ui-kinetic-form/radios',
   textareaComponent: 'semantic-ui-kinetic-form/textarea',
   selectComponent: 'semantic-ui-kinetic-form/select',
-  sectionComponent: 'kinetic-form/section'
+  sectionComponent: 'kinetic-form/section',
+  passfailComponent: 'semantic-ui-kinetic-form/passfail',
+  instructionsComponent: 'semantic-ui-kinetic-form/instructions',
+  multiplechoiceComponent: 'semantic-ui-kinetic-form/multiplechoice',
 });
