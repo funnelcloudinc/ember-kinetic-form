@@ -32,6 +32,9 @@ export default Component.extend({
   textareaComponent: 'kinetic-form/textarea',
   selectComponent: 'kinetic-form/select',
   sectionComponent: 'kinetic-form/section',
+  passfailComponent: 'kinetic-form/passfail',
+  instructionsComponent: 'kinetic-form/instructions',
+  multiplechoiceComponent: 'kinetic-form/multiplechoice',
 
   properties: reads('schemaParser.elements'),
 

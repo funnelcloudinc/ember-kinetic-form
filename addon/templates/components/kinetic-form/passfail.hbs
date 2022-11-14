@@ -1,0 +1,21 @@
+<div>
+  <div>
+    <label>{{field.title}}</label>
+    <div>
+      <label>
+        <input
+          type="radio"
+          checked={{eq value true}}
+          onclick={{action update true}}>
+        Pass
+      </label>
+      <label>
+        <input
+          type="radio"
+          checked={{eq value false}}
+          onclick={{action update false}}>
+        Fail
+      </label>
+    </div>
+  </div>
+</div>

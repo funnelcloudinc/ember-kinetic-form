@@ -24,6 +24,32 @@ export default Route.extend({
           '4': {
             type: 'boolean',
             title: 'frotz'
+          },
+          '5': {
+            type: 'select',
+            title: 'Select one',
+            options: [
+              'jam',
+              'honey'
+            ]
+          },
+          '6': {
+            type: 'passfail',
+            title: 'Pass or fail'
+          },
+          '7': {
+            type: 'instructions',
+            title: 'Here are my instructions'
+          },
+          '8': {
+            type: 'multiplechoice',
+            title: 'Choose many',
+            multiple_choice_options: [
+              'Happy',
+              'Sad',
+              "Undecided"
+            ],
+            allow_multiple_choice: true
           }
         }
       },
@@ -33,7 +59,7 @@ export default Route.extend({
         {
           type: 'section',
           title: 'Section 1',
-          items: [{ key: '2', type: 'radio' }, '1']
+          items: [{ key: '2', type: 'radio' }, '1','5','6','7','8']
         }
       ]
     };
