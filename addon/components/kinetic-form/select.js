@@ -1,14 +1,8 @@
-import Ember from 'ember';
+import ArrayProxy from '@ember/array/proxy';
+import Component from '@ember/component';
+import { get, computed } from '@ember/object';
+import { isEqual, isBlank } from '@ember/utils';
 import layout from '../../templates/components/kinetic-form/select';
-
-const {
-  ArrayProxy,
-  Component,
-  computed,
-  get,
-  isBlank,
-  isEqual
-} = Ember;
 
 const OptionsList = ArrayProxy.extend({
   objectAtContent(index) {

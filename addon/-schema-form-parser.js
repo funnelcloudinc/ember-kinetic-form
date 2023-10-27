@@ -1,18 +1,10 @@
-import Ember from 'ember';
-
-const {
-  A,
-  Error: EmberError,
-  Object: EmberObject,
-  assert,
-  assign,
-  computed,
-  computed: { reads },
-  deprecate,
-  isEmpty,
-  get,
-  typeOf
-} = Ember;
+import { A } from '@ember/array';
+import EmberError from '@ember/error';
+import { assign } from '@ember/polyfills';
+import { reads } from '@ember/object/computed';
+import { /* deprecate, */ assert } from '@ember/debug';
+import EmberObject, { get, computed } from '@ember/object';
+import { typeOf, isEmpty } from '@ember/utils';
 
 function PropertiesUnaccountedForError(name) {
   EmberError.call(this, `Property '${name}' was not accounted for in the 'form' array.`);
@@ -55,11 +47,11 @@ export function* normalizeFormElements(form, properties, requiredKeys, lookup) {
 }
 
 export function* normalizeLegacyFormElements(form, properties, requiredKeys, lookup) {
-  deprecate(
-    `When using the 'form' array all properties need to be accounted for.`,
-    false,
-    { id: 'legacy-kinetic-form-use', until: '1.0.0' }
-  );
+  // deprecate(
+  //   `When using the 'form' array all properties need to be accounted for.`,
+  //   false,
+  //   { id: 'legacy-kinetic-form-use', until: '1.0.0' }
+  // );
   let formOverrides = {};
   for (let override of form) {
     formOverrides[override.key] = override;

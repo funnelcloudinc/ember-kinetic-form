@@ -1,8 +1,7 @@
-import Ember from 'ember';
+import { isArray } from '@ember/array';
+import { typeOf, isNone } from '@ember/utils';
 import { module, test } from 'qunit';
 import validatorsFor from 'ember-kinetic-form/-validators-for';
-
-const { isArray, isNone, typeOf } = Ember;
 
 module('Unit | validatorsFor');
 

@@ -1,10 +1,9 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import { set } from '@ember/object';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/kinetic-form/form';
 import sinon from 'sinon';
-
-const { run, set } = Ember;
 
 moduleForComponent('kinetic-form/form', 'Integration | Component | kinetic form/form', {
   integration: true,

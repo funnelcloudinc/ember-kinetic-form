@@ -1,14 +1,17 @@
-import Ember from 'ember';
+import { alias, reads } from '@ember/object/computed';
+import Component from '@ember/component';
+import { isNone } from '@ember/utils';
+import { computed, set, get } from '@ember/object';
+import { A } from '@ember/array';
+import RSVP, { resolve } from 'rsvp';
+import ObjectProxy from '@ember/object/proxy';
+import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { task } from 'ember-concurrency';
 import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
 import validatorsFor from '../-validators-for';
 import SchemaFormParser from '../-schema-form-parser';
-
-const { Component, get, set, isNone, computed, A, RSVP, ObjectProxy, PromiseProxyMixin } = Ember;
-const { resolve } = RSVP;
-const { reads, alias } = computed;
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
 

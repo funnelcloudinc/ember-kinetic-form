@@ -1,9 +1,7 @@
-import Ember from 'ember';
+import { set } from '@ember/object';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/kinetic-form/errors';
-
-const { set } = Ember;
 
 moduleForComponent('kinetic-form/errors', 'Integration | Component | kinetic form/errors', {
   integration: true,

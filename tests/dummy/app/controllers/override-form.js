@@ -1,6 +1,6 @@
-import Ember from 'ember';
-
-const { Controller, computed: { reads }, set } = Ember;
+import Controller from '@ember/controller';
+import { reads } from '@ember/object/computed';
+import { set } from '@ember/object';
 
 export default Controller.extend({
   sampleDefinition: reads('model'),

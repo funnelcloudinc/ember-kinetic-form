@@ -1,7 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { set, get } from '@ember/object';
 import layout from '../../templates/components/kinetic-form/multiplechoice';
-
-const { Component, get, set } = Ember;
 
 export default Component.extend({
   layout,

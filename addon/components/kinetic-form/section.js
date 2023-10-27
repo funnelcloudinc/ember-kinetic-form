@@ -1,12 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { get, computed } from '@ember/object';
+import { dasherize } from '@ember/string';
 import layout from '../../templates/components/kinetic-form/section';
-
-const {
-  Component,
-  computed,
-  get,
-  String: { dasherize }
-} = Ember;
 
 export default Component.extend({
   layout,

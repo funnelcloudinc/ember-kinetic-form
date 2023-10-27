@@ -1,10 +1,9 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import { get, set } from '@ember/object';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/kinetic-form/select';
 import sinon from 'sinon';
-
-const { run, set, get } = Ember;
 
 moduleForComponent('kinetic-form/select', 'Integration | Component | kinetic form/select', {
   integration: true,

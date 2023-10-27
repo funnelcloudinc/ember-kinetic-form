@@ -1,7 +1,5 @@
-import Ember from 'ember';
+import { get } from '@ember/object';
 import SemanticUiKineticFormForm from 'ember-kinetic-form/components/semantic-ui-kinetic-form/form';
-
-const { get } = Ember;
 
 export default SemanticUiKineticFormForm.extend({
   actions: {

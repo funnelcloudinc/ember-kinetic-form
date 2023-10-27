@@ -1,8 +1,6 @@
-import Ember from 'ember';
+import { typeOf } from '@ember/utils';
 import { module, test } from 'qunit';
 import validateIsTrue from 'ember-kinetic-form/validators/is-true';
-
-const { typeOf } = Ember;
 
 module('Unit | Validators | is-true');
 

@@ -1,4 +1,8 @@
-import Ember from 'ember';
+import { set, get } from '@ember/object';
+import { run } from '@ember/runloop';
+import ObjectProxy from '@ember/object/proxy';
+import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
+import { Promise } from 'rsvp';
 import EmObject from 'ember-object';
 import { moduleForComponent, test } from 'ember-qunit';
 import { default as settled } from 'ember-test-helpers/wait';
@@ -7,13 +11,6 @@ import hbs from 'htmlbars-inline-precompile';
 import page from '../../pages/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import isChangeset from 'ember-changeset/utils/is-changeset';
-
-const {
-  get, set, run,
-  ObjectProxy,
-  PromiseProxyMixin,
-  RSVP: { Promise }
-} = Ember;
 
 moduleForComponent('kinetic-form', 'Integration | Component | kinetic form', {
   integration: true,
