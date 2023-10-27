@@ -14,6 +14,7 @@ export default Controller.extend({
     update() {
       return new Promise((resolve) => {
         setTimeout(() => {
+          // eslint-disable-next-line no-console
           console.log('update fired');
           return resolve();
         }, 3000);
