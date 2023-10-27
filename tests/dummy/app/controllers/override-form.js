@@ -5,6 +5,7 @@ import { set } from '@ember/object';
 export default Controller.extend({
   sampleDefinition: reads('model'),
 
+  // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   sampleModel: {},
 
   actions: {

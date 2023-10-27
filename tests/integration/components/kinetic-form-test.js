@@ -251,6 +251,7 @@ test('shows loading component when passed a promise', function (assert) {
 
 test('shows loading component when passed a PromiseProxyMixin', function (assert) {
   let proxy = ObjectProxy.extend(PromiseProxyMixin, {
+    // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
     promise: new Promise(() => {})
   });
   let promise = proxy.create();
