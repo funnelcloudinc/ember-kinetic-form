@@ -11,7 +11,7 @@ export default Controller.extend({
       alert('fake sent');
     },
     update() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         setTimeout(() => {
           console.log('update fired');
           return resolve();

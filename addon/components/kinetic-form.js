@@ -3,7 +3,7 @@ import Component from '@ember/component';
 import { isNone } from '@ember/utils';
 import { computed, set, get } from '@ember/object';
 import { A } from '@ember/array';
-import RSVP, { resolve } from 'rsvp';
+import { resolve } from 'rsvp';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { task } from 'ember-concurrency';
