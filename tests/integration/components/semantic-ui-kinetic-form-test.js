@@ -1,9 +1,8 @@
-import { set, get } from '@ember/object';
+import EmberObject, { set, get } from '@ember/object';
 import { run } from '@ember/runloop';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { Promise } from 'rsvp';
-import EmObject from 'ember-object';
 import { moduleForComponent, test } from 'ember-qunit';
 import sinon from 'sinon';
 import hbs from 'htmlbars-inline-precompile';
@@ -16,7 +15,7 @@ moduleForComponent('semantic-ui-kinetic-form', 'Integration | Component | semant
 
   beforeEach() {
     page.setContext(this);
-    set(this, 'testModel', EmObject.create());
+    set(this, 'testModel', EmberObject.create());
     set(this, 'submitSpy', sinon.spy());
   },
 
