@@ -195,6 +195,7 @@ test('calls onUpdate action when user updates the form', async function () {
   set(this, 'updateSpy', sinon.spy());
   set(this, 'testDefinition', {
     schema: {
+      type: 'object',
       properties: {
         fieldA: {type: 'string'},
       }
@@ -217,6 +218,7 @@ test('does not call onUpdate action when user updates the form but is invalid', 
   set(this, 'updateSpy', sinon.spy());
   set(this, 'testDefinition', {
     schema: {
+      type: 'object',
       required: ['fieldA'],
       properties: {
         fieldA: {type: 'string'},
