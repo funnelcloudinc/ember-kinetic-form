@@ -1,5 +1,5 @@
 import { run } from '@ember/runloop';
-import { get, set } from '@ember/object';
+import { set } from '@ember/object';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/semantic-ui-kinetic-form/string';
@@ -38,7 +38,7 @@ test('shows the current value', function(assert) {
 test('calls update action when user enters text', function() {
   this.render(hbs`{{semantic-ui-kinetic-form/string update=(action updateSpy)}}`);
   run(() => page.enterText('test-text'));
-  sinon.assert.calledWith(get(this, 'updateSpy'), 'test-text');
+  sinon.assert.calledWith(this.updateSpy, 'test-text');
 });
 
 test('highlights as an error when error is truthy', function(assert) {

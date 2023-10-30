@@ -1,5 +1,5 @@
 import { run } from '@ember/runloop';
-import { get, set } from '@ember/object';
+import { set } from '@ember/object';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/semantic-ui-kinetic-form/radios';
@@ -43,9 +43,9 @@ test('shows the current value', function(assert) {
 test('calls update action when user enters text', function() {
   this.render(hbs`{{semantic-ui-kinetic-form/radios update=(action updateSpy)}}`);
   run(() => page.turnOn());
-  sinon.assert.calledWith(get(this, 'updateSpy'), true);
+  sinon.assert.calledWith(this.updateSpy, true);
   run(() => page.turnOff());
-  sinon.assert.calledWith(get(this, 'updateSpy'), false);
+  sinon.assert.calledWith(this.updateSpy, false);
 });
 
 test('highlights as an error when error is truthy', function(assert) {

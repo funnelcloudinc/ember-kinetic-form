@@ -9,7 +9,7 @@ export default Component.extend({
 
   anchor: computed('field.title', {
     get() {
-      let title = get(this, 'field.title') || `section-${get(this, 'elementId')}`;
+      let title = get(this, 'field.title') || `section-${this.elementId}`;
       return dasherize(title);
     }
   })

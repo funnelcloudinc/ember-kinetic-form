@@ -3,7 +3,7 @@ import EmberError from '@ember/error';
 import { assign } from '@ember/polyfills';
 import { reads } from '@ember/object/computed';
 import { /* deprecate, */ assert } from '@ember/debug';
-import EmberObject, { get, computed } from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
 import { typeOf, isEmpty } from '@ember/utils';
 
 function PropertiesUnaccountedForError(name) {
@@ -70,10 +70,10 @@ export default EmberObject.extend({
 
   elements: computed('{properties,form.[],required.[]}', {
     get() {
-      let form = get(this, 'form');
-      let properties = get(this, 'properties');
-      let requiredKeys = get(this, 'required') || [];
-      let lookup = get(this, 'lookupComponentName') || function() {};
+      let form = this.form;
+      let properties = this.properties;
+      let requiredKeys = this.required || [];
+      let lookup = this.lookupComponentName || function() {};
       try {
         return [...normalizeFormElements(form, properties, requiredKeys, lookup)];
       } catch (error) {
@@ -85,8 +85,8 @@ export default EmberObject.extend({
 
   init() {
     this._super(...arguments);
-    let schemaType = get(this, 'type');
+    let schemaType = this.type;
     assert(`${schemaType} in not a supported schema type`, schemaType === 'object');
-    assert('schema have a properties object', get(this, 'properties'));
+    assert('schema have a properties object', this.properties);
   }
 });

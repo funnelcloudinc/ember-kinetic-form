@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import { get } from '@ember/object';
 import layout from '../../templates/components/kinetic-form/boolean';
 
 export default Component.extend({
@@ -10,7 +9,7 @@ export default Component.extend({
 
   actions: {
     toggle() {
-      get(this, 'update')(!get(this, 'value'));
+      this.update(!this.value);
     }
   }
 });

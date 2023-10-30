@@ -10,7 +10,7 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    const value = get(this, 'value')
+    const value = this.value
 
     if (!value) {
       const numberOfChoices = get(this, 'field.multiple_choice_options.length');
@@ -25,7 +25,7 @@ export default Component.extend({
   actions: {
     updateChoice(index) {
       let updatedValue;
-      const choices = get(this, 'workingValue');
+      const choices = this.workingValue;
 
       if (get(this, 'field.allow_multiple_choice')) {
         updatedValue = [...choices];  
@@ -41,9 +41,9 @@ export default Component.extend({
 
       if (updatedValue.every(a => !a)) {
         // Reset to no input if no answers are selected.
-        get(this, 'update')('');  
+        this.update('');  
       } else {
-        get(this, 'update')(updatedValue);
+        this.update(updatedValue);
       }
     }
   }

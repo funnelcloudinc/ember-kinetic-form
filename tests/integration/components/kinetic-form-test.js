@@ -1,4 +1,4 @@
-import EmberObject, { set, get } from '@ember/object';
+import EmberObject, { set } from '@ember/object';
 import { run } from '@ember/runloop';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
@@ -168,7 +168,7 @@ test('calls onSubmit action when user submits the form', function () {
         onSubmit=(action submitSpy)}}
   `);
   run(() => page.submit());
-  sinon.assert.calledWith(get(this, 'submitSpy'), sinon.match(isChangeset, 'Changeset'));
+  sinon.assert.calledWith(this.submitSpy, sinon.match(isChangeset, 'Changeset'));
 });
 
 test('does not call onSubmit action when user submits the form but is invalid', function () {
@@ -188,7 +188,7 @@ test('does not call onSubmit action when user submits the form but is invalid', 
         onSubmit=(action submitSpy)}}
   `);
   run(() => page.submit());
-  sinon.assert.notCalled(get(this, 'submitSpy'));
+  sinon.assert.notCalled(this.submitSpy);
 });
 
 test('calls onUpdate action when user updates the form', async function () {
@@ -211,7 +211,7 @@ test('calls onUpdate action when user updates the form', async function () {
   `);
   run(() => page.stringField.enterText('foobar'));
   await settled();
-  sinon.assert.calledWith(get(this, 'updateSpy'), sinon.match(isChangeset, 'Changeset'));
+  sinon.assert.calledWith(this.updateSpy, sinon.match(isChangeset, 'Changeset'));
 });
 
 test('does not call onUpdate action when user updates the form but is invalid', async function () {
@@ -235,7 +235,7 @@ test('does not call onUpdate action when user updates the form but is invalid', 
   `);
   run(() => page.stringField.enterText(''));
   await settled();
-  sinon.assert.notCalled(get(this, 'updateSpy'));
+  sinon.assert.notCalled(this.updateSpy);
 });
 
 test('shows loading component when passed a promise', function (assert) {

@@ -46,7 +46,7 @@ export default Component.extend({
   validators: computed('properties.@each.required', {
     get() {
       let validators = {};
-      let properties = get(this, 'properties');
+      let properties = this.properties;
 
       function buildValidators(items = []) {
         for (let item of items) {
@@ -67,8 +67,8 @@ export default Component.extend({
 
   changeset: computed('{model,validators}', {
     get() {
-      let model = get(this, 'model');
-      let validations = get(this, 'validators');
+      let model = this.model;
+      let validations = this.validators;
       let changeset = new Changeset(model, lookupValidator(validations), validations, { skipValidate: true });
       return changeset;
     }
@@ -76,7 +76,7 @@ export default Component.extend({
 
   decoratedDefinition: computed('definition', {
     get() {
-      let promise = resolve(get(this, 'definition'));
+      let promise = resolve(this.definition);
       return DefinitionDecorator.create({ promise });
     }
   }),
@@ -88,7 +88,7 @@ export default Component.extend({
       };
       let schema = get(this, 'decoratedDefinition.schema') || {};
       let form = A(get(this, 'decoratedDefinition.form') || []);
-      let existingSchemaParser = get(this, '_schemaParser');
+      let existingSchemaParser = this._schemaParser;
 
       if (existingSchemaParser && !Object.keys(schema).length && !form.length) {
         return existingSchemaParser;
@@ -103,7 +103,7 @@ export default Component.extend({
   }),
 
   validateForm(field) {
-    let changeset = get(this, 'changeset');
+    let changeset = this.changeset;
     return changeset.validate(field).then(() => {
       set(this, 'showErrors', false);
       if (field && isNone(get(changeset, `error.${field}`))) {
@@ -118,7 +118,7 @@ export default Component.extend({
   },
 
   handleFormChanges({ key, value }) {
-    let changeset = this.get('changeset');
+    let changeset = this.changeset;
     changeset.set(`${key}`, value);
     return { changeset };
   },
@@ -127,15 +127,15 @@ export default Component.extend({
     if (validate) {
       let isValid = yield this.validateForm();
       if (!isValid) return;
-      return yield this.get('onSubmitTask').perform({ changeset, complete: true });
+      return yield this.onSubmitTask.perform({ changeset, complete: true });
     } else {
-      return yield this.get('onSubmitTask').perform({ changeset, complete: false });
+      return yield this.onSubmitTask.perform({ changeset, complete: false });
     }
   }),
 
   // Wrap `onSubmit` action in a task so we can use the tasks derived state to handle UI state
   onSubmitTask: task(function*({ changeset, complete }) {
-    return yield this.get('onSubmit')(changeset, complete);
+    return yield this.onSubmit(changeset, complete);
   }),
 
   init() {
@@ -145,15 +145,15 @@ export default Component.extend({
 
   actions: {
     updateProperty(key, value) {
-      if (this.get('readOnly')) return;
+      if (this.readOnly) return;
       let { changeset } = this.handleFormChanges({ key, value });
-      return get(this, 'onUpdate')(changeset);
+      return this.onUpdate(changeset);
     },
 
     submit(validate = true) {
-      if (this.get('readOnly')) return;
-      let changeset = this.get('changeset');
-      return this.get('submitTask').perform({ changeset, validate });
+      if (this.readOnly) return;
+      let changeset = this.changeset;
+      return this.submitTask.perform({ changeset, validate });
     }
   }
 });

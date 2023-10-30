@@ -6,8 +6,8 @@ import layout from '../../templates/components/kinetic-form/select';
 
 const OptionsList = ArrayProxy.extend({
   objectAtContent(index) {
-    let selectedValue = get(this, 'selectedValue');
-    let value = get(this, 'content')[index];
+    let selectedValue = this.selectedValue;
+    let value = this.content[index];
     return {
       value,
       selected: isEqual(value, selectedValue)
@@ -23,19 +23,19 @@ export default Component.extend({
 
   hasNoValue: computed('value', {
     get() {
-      return isBlank(get(this, 'value'));
+      return isBlank(this.value);
     }
   }),
 
   showPrompt: computed('{hasNoValue,field.required}', {
     get() {
-      return !get(this, 'field.required') || get(this, 'hasNoValue');
+      return !get(this, 'field.required') || this.hasNoValue;
     }
   }),
 
   options: computed('field.options.[]', {
     get() {
-      let selectedValue = get(this, 'value');
+      let selectedValue = this.value;
       let content = get(this, 'field.options') || [];
       return OptionsList.create({content, selectedValue});
     }

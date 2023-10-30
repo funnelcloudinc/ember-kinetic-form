@@ -1,4 +1,4 @@
-import EmberObject, { set, get } from '@ember/object';
+import EmberObject, { set } from '@ember/object';
 import { run } from '@ember/runloop';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
@@ -167,7 +167,7 @@ test('calls onSubmit action when user submits the form', function () {
         onSubmit=(action submitSpy)}}
   `);
   run(() => page.submit());
-  sinon.assert.calledWith(get(this, 'submitSpy'), sinon.match(isChangeset, 'Changeset'));
+  sinon.assert.calledWith(this.submitSpy, sinon.match(isChangeset, 'Changeset'));
 });
 
 test('shows loading component when passed a promise', function (assert) {

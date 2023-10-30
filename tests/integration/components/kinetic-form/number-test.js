@@ -1,5 +1,5 @@
 import { run } from '@ember/runloop';
-import { get, set } from '@ember/object';
+import { set } from '@ember/object';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/kinetic-form/number';
@@ -38,7 +38,7 @@ test('shows the current value', function(assert) {
 test('calls update action when user enters text', function() {
   this.render(hbs`{{kinetic-form/number update=(action updateSpy)}}`);
   run(() => page.enterText('456'));
-  sinon.assert.calledWith(get(this, 'updateSpy'), '456');
+  sinon.assert.calledWith(this.updateSpy, '456');
 });
 
 test('highlights as an error when error is truthy', function(assert) {
