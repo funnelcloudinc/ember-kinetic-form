@@ -6,11 +6,11 @@
   {{#if showPrompt}}
     <option value="" selected={{hasNoValue}}>--</option>
   {{/if}}
-  {{#each options as |option|}}
+  {{#each options as |opt|}}
     <option
-        value={{option.value}}
-        selected={{option.selected}}>
-      {{option.value}}
+        value={{opt.value}}
+        selected={{opt.selected}}>
+      {{opt.value}}
     </option>
   {{/each}}
 </select>
