@@ -1,21 +1,25 @@
 import { set } from '@ember/object';
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/kinetic-form/errors';
 
-moduleForComponent('kinetic-form/errors', 'Integration | Component | kinetic form/errors', {
-  integration: true,
-  beforeEach() {
-    page.setContext(this);
-  },
-  afterEach() {
-    page.removeContext();
-  }
-});
+module('Integration | Component | kinetic form/errors', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('displays a list of errors', function(assert) {
-  set(this, 'testErrors', ['test1', 'test2']);
-  this.render(hbs`{{kinetic-form/errors errors=testErrors}}`);
-  assert.equal(page.messages(0).text, 'test1');
-  assert.equal(page.messages(1).text, 'test2');
+  hooks.beforeEach(function() {
+    page.setContext(this);
+  });
+
+  hooks.afterEach(function() {
+    page.removeContext();
+  });
+
+  test('displays a list of errors', async function(assert) {
+    set(this, 'testErrors', ['test1', 'test2']);
+    await render(hbs`{{kinetic-form/errors errors=testErrors}}`);
+    assert.equal(page.messages(0).text, 'test1');
+    assert.equal(page.messages(1).text, 'test2');
+  });
 });
