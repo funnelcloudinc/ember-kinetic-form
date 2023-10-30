@@ -38,7 +38,7 @@ test('renders different form fields from definition schema', function (assert) {
       }
     }
   });
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel
@@ -55,7 +55,7 @@ test('render string field as default type', function (assert) {
   set(this, 'testDefinition', {
     schema: {type: 'object', properties: {fieldA: {type: 'foobar'}}}
   });
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel
@@ -74,7 +74,7 @@ test('can override components', function (assert) {
       }
     }
   });
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         numberComponent="kinetic-form/boolean"
         foobarComponent="kinetic-form/radios"
@@ -91,7 +91,7 @@ test('shows errors section when changeset has errors', function (assert) {
   mockChangeset.addError('base', 'test-error');
   set(this, 'testDefinition', {schema: {type: 'object', properties: {}}});
   set(this, 'mockChangeset', mockChangeset);
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         showErrors=true
         changeset=mockChangeset
@@ -117,7 +117,7 @@ test('overrides field type from form section of definition', function (assert) {
       }
     ]
   });
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel
@@ -138,7 +138,7 @@ test('marks fields as required when listed in required section of schema', funct
       }
     }
   });
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel
@@ -150,7 +150,7 @@ test('marks fields as required when listed in required section of schema', funct
 
 test('displays a form title from title section of schema', function (assert) {
   set(this, 'testDefinition', {schema: {type: 'object', title: 'test-title', properties: {}}});
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel
@@ -161,7 +161,7 @@ test('displays a form title from title section of schema', function (assert) {
 
 test('calls onSubmit action when user submits the form', function () {
   set(this, 'testDefinition', {schema: {type: 'object', properties: {}}});
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel
@@ -181,7 +181,7 @@ test('does not call onSubmit action when user submits the form but is invalid', 
       }
     }
   });
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel
@@ -201,7 +201,7 @@ test('calls onUpdate action when user updates the form', async function () {
       }
     }
   });
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         updateDebounceDelay=0
         definition=testDefinition
@@ -225,7 +225,7 @@ test('does not call onUpdate action when user updates the form but is invalid', 
       }
     }
   });
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         updateDebounceDelay=0
         definition=testDefinition
@@ -241,7 +241,7 @@ test('does not call onUpdate action when user updates the form but is invalid', 
 test('shows loading component when passed a promise', function (assert) {
   let promise = new Promise(() => {});
   set(this, 'testDefinition', promise);
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel
@@ -258,7 +258,7 @@ test('shows loading component when passed a PromiseProxyMixin', function (assert
   });
   let promise = proxy.create();
   set(this, 'testDefinition', promise);
-  page.render(hbs`
+  this.render(hbs`
     {{kinetic-form
         definition=testDefinition
         model=testModel

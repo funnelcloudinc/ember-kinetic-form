@@ -15,7 +15,7 @@ moduleForComponent('kinetic-form/errors', 'Integration | Component | kinetic for
 
 test('displays a list of errors', function(assert) {
   set(this, 'testErrors', ['test1', 'test2']);
-  page.render(hbs`{{kinetic-form/errors errors=testErrors}}`);
+  this.render(hbs`{{kinetic-form/errors errors=testErrors}}`);
   assert.equal(page.messages(0).text, 'test1');
   assert.equal(page.messages(1).text, 'test2');
 });

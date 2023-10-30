@@ -15,19 +15,19 @@ moduleForComponent('kinetic-form/section', 'Integration | Component | kinetic fo
 
 test('displays field.title', function(assert) {
   set(this, 'testField', {title: 'test title'});
-  page.render(hbs`{{kinetic-form/section field=testField}}`);
+  this.render(hbs`{{kinetic-form/section field=testField}}`);
   assert.ok(page.hasInTitle('test title'), 'expected field.title to be displayed');
 });
 
 test('displays provides a linkable anchor', function(assert) {
   set(this, 'testField', {title: 'test title'});
-  page.render(hbs`{{kinetic-form/section field=testField}}`);
+  this.render(hbs`{{kinetic-form/section field=testField}}`);
   assert.equal(page.anchor, 'test-title');
 });
 
 test('yields field.items', function(assert) {
   set(this, 'testField', {title: 'test-title', items: ['1', '2', '3']});
-  page.render(hbs`
+  this.render(hbs`
     {{#kinetic-form/section field=testField as |item|}}
       test-{{item}}
     {{/kinetic-form/section}}

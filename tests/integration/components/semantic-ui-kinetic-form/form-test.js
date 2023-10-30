@@ -16,26 +16,26 @@ moduleForComponent('semantic-ui-kinetic-form/form', 'Integration | Component | s
 });
 
 test('yields a block', function (assert) {
-  page.render(hbs`{{#semantic-ui-kinetic-form/form}}Test block content{{/semantic-ui-kinetic-form/form}}`);
+  this.render(hbs`{{#semantic-ui-kinetic-form/form}}Test block content{{/semantic-ui-kinetic-form/form}}`);
   assert.ok(page.text.includes('Test block content'), 'expected component to render block content');
 });
 
 test('displays a title', function(assert) {
-  page.render(hbs`{{semantic-ui-kinetic-form/form title="test-title"}}`);
+  this.render(hbs`{{semantic-ui-kinetic-form/form title="test-title"}}`);
   assert.equal(page.title, 'test-title');
 });
 
 test('disables submit button when isInvalid is true', function (assert) {
-  page.render(hbs`{{semantic-ui-kinetic-form/form isInvalid=false}}`);
+  this.render(hbs`{{semantic-ui-kinetic-form/form isInvalid=false}}`);
   assert.ok(page.submitButton.isEnabled, 'expected submit button to be enabled');
-  page.render(hbs`{{semantic-ui-kinetic-form/form isInvalid=true}}`);
+  this.render(hbs`{{semantic-ui-kinetic-form/form isInvalid=true}}`);
   assert.ok(page.submitButton.isDisabled, 'expected submit button to be disabled');
 });
 
 test('calls onSubmit action when user clicks submit button', function () {
   let onSubmitSpy = sinon.spy();
   set(this, 'onSubmitSpy', onSubmitSpy);
-  page.render(hbs`{{semantic-ui-kinetic-form/form onSubmit=(action onSubmitSpy)}}`);
+  this.render(hbs`{{semantic-ui-kinetic-form/form onSubmit=(action onSubmitSpy)}}`);
   run(() => page.submitButton.click());
   sinon.assert.calledOnce(onSubmitSpy);
 });
