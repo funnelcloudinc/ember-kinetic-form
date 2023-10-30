@@ -4,16 +4,12 @@ import page from '../../tests/pages/override-form';
 
 moduleForAcceptance('Acceptance | override form');
 
-test('clicking submit button submits with a false validated flag', function(assert) {
+test('clicking submit button submits with a false validated flag', async function(assert) {
   page.visit().submit();
-  andThen(function() {
-    assert.equal(page.didValidationsResult, 'true');
-  });
+  await assert.equal(page.didValidationsResult, 'true');
 });
 
-test('clicking incomplete button submits with a false validated flag', function(assert) {
+test('clicking incomplete button submits with a false validated flag', async function(assert) {
   page.visit().incompleteSubmit();
-  andThen(function() {
-    assert.equal(page.didValidationsResult, 'false');
-  });
+  await assert.equal(page.didValidationsResult, 'false');
 });
