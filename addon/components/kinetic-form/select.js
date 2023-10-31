@@ -33,7 +33,7 @@ export default Component.extend({
     }
   }),
 
-  options: computed('field.options.[]', {
+  options: computed('{field.options.[],value}', {
     get() {
       let selectedValue = this.value;
       let content = get(this, 'field.options') || [];

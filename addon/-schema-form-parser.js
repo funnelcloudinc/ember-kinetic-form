@@ -68,7 +68,7 @@ export default EmberObject.extend({
   required: reads('schema.required'),
   properties: reads('schema.properties'),
 
-  elements: computed('{properties,form.[],required.[]}', {
+  elements: computed('{properties,form.[],required.[],lookupComponentName}', {
     get() {
       let form = this.form;
       let properties = this.properties;

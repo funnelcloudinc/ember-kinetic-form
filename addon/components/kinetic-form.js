@@ -81,7 +81,7 @@ export default Component.extend({
     }
   }),
 
-  schemaParser: computed('decoratedDefinition.{schema,form}', {
+  schemaParser: computed('{decoratedDefinition.schema,decoratedDefinition.form,_schemaParser}', {
     get() {
       const lookupComponentName = type => {
         return get(this, `${type}Component`) || get(this, DEFAULT_COMPONENT_NAME_PROP);
