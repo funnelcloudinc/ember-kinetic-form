@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { set, get } from '@ember/object';
 import layout from '../../templates/components/kinetic-form/multiplechoice';
+import { A } from '@ember/array';
 
 export default Component.extend({
   layout,
@@ -28,11 +29,11 @@ export default Component.extend({
       const choices = this.workingValue;
 
       if (get(this, 'field.allow_multiple_choice')) {
-        updatedValue = [...choices];  
+        updatedValue = A([...choices]);
       } else {
         const numberOfChoices = get(this, 'field.multiple_choice_options.length');
 
-        updatedValue = Array(numberOfChoices).fill(false);
+        updatedValue = A(Array(numberOfChoices).fill(false));
       }
 
       updatedValue.replace(index, 1, [ !choices[index] ]);
