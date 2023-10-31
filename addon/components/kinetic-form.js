@@ -86,8 +86,8 @@ export default Component.extend({
       const lookupComponentName = type => {
         return get(this, `${type}Component`) || get(this, DEFAULT_COMPONENT_NAME_PROP);
       };
-      let schema = get(this, 'decoratedDefinition.schema') || {};
-      let form = A(get(this, 'decoratedDefinition.form') || []);
+      let schema = this.decoratedDefinition.get('schema') || {};
+      let form = A(this.decoratedDefinition.get('form') || []);
       let existingSchemaParser = this._schemaParser;
 
       if (existingSchemaParser && !Object.keys(schema).length && !form.length) {
@@ -109,7 +109,7 @@ export default Component.extend({
       if (field && isNone(get(changeset, `error.${field}`))) {
         return true;
       }
-      if (get(changeset, 'isValid')) {
+      if (changeset.isValid) {
         return true;
       }
       set(this, 'showErrors', true);

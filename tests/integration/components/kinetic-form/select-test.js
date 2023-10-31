@@ -47,8 +47,9 @@ module('Integration | Component | kinetic form/select', function(hooks) {
   });
 
   test('highlights as an error when error is truthy', async function(assert) {
+    set(this, 'testField', {options: ['foo', 'test-text', 'bar']});
     set(this, 'testError', null);
-    await render(hbs`{{kinetic-form/select error=testError update=(action updateSpy)}}`);
+    await render(hbs`{{kinetic-form/select field=testField error=testError update=(action updateSpy)}}`);
     assert.notOk(page.hasError, 'expected to not have error highlight');
     run(() => set(this, 'testError', {message: 'test-error'}));
     assert.ok(page.hasError, 'expected to have error highlight');

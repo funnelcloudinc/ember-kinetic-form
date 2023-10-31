@@ -1,6 +1,6 @@
 import ArrayProxy from '@ember/array/proxy';
 import Component from '@ember/component';
-import { get, computed } from '@ember/object';
+import { computed } from '@ember/object';
 import { isEqual, isBlank } from '@ember/utils';
 import layout from '../../templates/components/kinetic-form/select';
 
@@ -29,14 +29,14 @@ export default Component.extend({
 
   showPrompt: computed('{hasNoValue,field.required}', {
     get() {
-      return !get(this, 'field.required') || this.hasNoValue;
+      return !this.field.required || this.hasNoValue;
     }
   }),
 
   options: computed('{field.options.[],value}', {
     get() {
       let selectedValue = this.value;
-      let content = get(this, 'field.options') || [];
+      let content = this.field.options || [];
       return OptionsList.create({content, selectedValue});
     }
   })
