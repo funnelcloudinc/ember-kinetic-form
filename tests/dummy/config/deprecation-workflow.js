@@ -3,6 +3,8 @@
   The deprecations below are obtained by running `console.log(deprecationWorkflow.flushDeprecations())`
   in the browser console that i srunning the test suite, from `ember test --server`.
 */
+
+/* eslint-disable no-undef */
 self.deprecationWorkflow = self.deprecationWorkflow || {};
 self.deprecationWorkflow.config = {
   workflow: [
@@ -12,3 +14,4 @@ self.deprecationWorkflow.config = {
     { handler: "silence", matchId: "computed-property.override" }
   ]
 };
+/* eslint-enable no-undef */
