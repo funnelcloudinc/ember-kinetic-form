@@ -40,9 +40,9 @@ module('Integration | Component | semantic ui kinetic form/radios', function(hoo
 
   test('calls update action when user enters text', async function() {
     await render(hbs`{{semantic-ui-kinetic-form/radios update=(action updateSpy)}}`);
-    run(() => page.turnOn());
+    await page.turnOn();
     sinon.assert.calledWith(this.updateSpy, true);
-    run(() => page.turnOff());
+    await page.turnOff();
     sinon.assert.calledWith(this.updateSpy, false);
   });
 

@@ -35,7 +35,7 @@ module('Integration | Component | kinetic form/number', function(hooks) {
 
   test('calls update action when user enters text', async function() {
     await render(hbs`{{kinetic-form/number update=(action updateSpy)}}`);
-    run(() => page.enterText('456'));
+    await page.enterText('456');
     sinon.assert.calledWith(this.updateSpy, '456');
   });
 

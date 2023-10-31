@@ -37,7 +37,7 @@ module('Integration | Component | kinetic form/select', function(hooks) {
   test('calls update action when user enters text', async function() {
     set(this, 'testField', {options: ['foo', 'test-text', 'bar']});
     await render(hbs`{{kinetic-form/select field=testField update=(action updateSpy)}}`);
-    run(() => page.select('test-text'));
+    await page.select('test-text');
     sinon.assert.calledWith(this.updateSpy, 'test-text');
   });
 

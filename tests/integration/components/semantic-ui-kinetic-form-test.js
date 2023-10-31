@@ -1,5 +1,4 @@
 import EmberObject, { set } from '@ember/object';
-import { run } from '@ember/runloop';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { Promise } from 'rsvp';
@@ -162,7 +161,7 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
           model=testModel
           onSubmit=(action submitSpy)}}
     `);
-    run(() => page.submit());
+    await page.submit();
     sinon.assert.calledWith(this.submitSpy, sinon.match(isChangeset, 'Changeset'));
   });
 

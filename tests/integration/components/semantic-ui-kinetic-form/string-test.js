@@ -35,7 +35,7 @@ module('Integration | Component | semantic ui kinetic form/string', function(hoo
 
   test('calls update action when user enters text', async function() {
     await render(hbs`{{semantic-ui-kinetic-form/string update=(action updateSpy)}}`);
-    run(() => page.enterText('test-text'));
+    await page.enterText('test-text');
     sinon.assert.calledWith(this.updateSpy, 'test-text');
   });
 

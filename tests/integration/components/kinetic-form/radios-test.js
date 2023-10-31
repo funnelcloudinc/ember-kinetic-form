@@ -40,9 +40,9 @@ module('Integration | Component | kinetic form/radios', function(hooks) {
 
   test('calls update action when user enters text', async function() {
     await render(hbs`{{kinetic-form/radios update=(action updateSpy)}}`);
-    run(() => page.turnOn());
+    await page.turnOn();
     sinon.assert.calledWith(this.updateSpy, true);
-    run(() => page.turnOff());
+    await page.turnOff();
     sinon.assert.calledWith(this.updateSpy, false);
   });
 

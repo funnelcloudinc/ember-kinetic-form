@@ -39,7 +39,7 @@ module('Integration | Component | semantic ui kinetic form/select', function(hoo
   test('calls update action when user enters text', async function() {
     set(this, 'testField', {options: ['foo', 'test-text', 'bar']});
     await render(hbs`{{semantic-ui-kinetic-form/select field=testField update=(action updateSpy)}}`);
-    run(() => page.select('test-text'));
+    await page.select('test-text');
     sinon.assert.calledWith(this.updateSpy, 'test-text');
   });
 

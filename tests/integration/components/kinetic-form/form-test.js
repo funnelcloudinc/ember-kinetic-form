@@ -1,4 +1,3 @@
-import { run } from '@ember/runloop';
 import { set } from '@ember/object';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
@@ -31,7 +30,7 @@ module('Integration | Component | kinetic form/form', function(hooks) {
     let onSubmitSpy = sinon.spy();
     set(this, 'onSubmitSpy', onSubmitSpy);
     await render(hbs`{{kinetic-form/form onSubmit=(action onSubmitSpy)}}`);
-    run(() => page.submitButton.click());
+    await page.submitButton.click();
     sinon.assert.calledOnce(onSubmitSpy);
   });
 });

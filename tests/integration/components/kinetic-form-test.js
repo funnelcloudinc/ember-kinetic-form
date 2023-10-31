@@ -162,7 +162,7 @@ module('Integration | Component | kinetic form', function(hooks) {
           model=testModel
           onSubmit=(action submitSpy)}}
     `);
-    run(() => page.submit());
+    await page.submit();
     sinon.assert.calledWith(this.submitSpy, sinon.match(isChangeset, 'Changeset'));
   });
 

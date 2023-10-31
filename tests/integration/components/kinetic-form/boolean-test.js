@@ -35,7 +35,7 @@ module('Integration | Component | kinetic form/boolean', function(hooks) {
 
   test('calls update action when user enters text', async function() {
     await render(hbs`{{kinetic-form/boolean update=(action updateSpy)}}`);
-    run(() => page.toggle());
+    await page.toggle();
     sinon.assert.calledWith(this.updateSpy, true);
   });
 
