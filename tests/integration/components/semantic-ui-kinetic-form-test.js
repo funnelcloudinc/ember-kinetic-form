@@ -16,13 +16,8 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
   setupRenderingTest(hooks);
 
   hooks.beforeEach(function() {
-    page.setContext(this);
     set(this, 'testModel', EmberObject.create());
     set(this, 'submitSpy', sinon.spy());
-  });
-
-  hooks.afterEach(function() {
-    page.removeContext();
   });
 
   test('renders different form fields from definition schema', async function(assert) {

@@ -10,14 +10,6 @@ import sinon from 'sinon';
 module('Integration | Component | kinetic form/form', function(hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function() {
-    page.setContext(this);
-  });
-
-  hooks.afterEach(function() {
-    page.removeContext();
-  });
-
   test('yields a block', async function(assert) {
     await render(hbs`{{#kinetic-form/form}}Test block content{{/kinetic-form/form}}`);
     assert.ok(page.text.includes('Test block content'), 'expected component to render block content');

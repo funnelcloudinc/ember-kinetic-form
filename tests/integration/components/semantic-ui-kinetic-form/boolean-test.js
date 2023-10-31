@@ -11,12 +11,7 @@ module('Integration | Component | semantic ui kinetic form/boolean', function(ho
   setupRenderingTest(hooks);
 
   hooks.beforeEach(function() {
-    page.setContext(this);
     set(this, 'updateSpy', sinon.spy());
-  });
-
-  hooks.afterEach(function() {
-    page.removeContext();
   });
 
   test('displays field.title', async function(assert) {

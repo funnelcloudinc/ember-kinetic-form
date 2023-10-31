@@ -11,12 +11,7 @@ module('Integration | Component | kinetic form/select', function(hooks) {
   setupRenderingTest(hooks);
 
   hooks.beforeEach(function() {
-    page.setContext(this);
     set(this, 'updateSpy', sinon.spy());
-  });
-
-  hooks.afterEach(function() {
-    page.removeContext();
   });
 
   test('displays field.title', async function(assert) {

@@ -8,14 +8,6 @@ import page from '../../../pages/components/kinetic-form/errors';
 module('Integration | Component | kinetic form/errors', function(hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function() {
-    page.setContext(this);
-  });
-
-  hooks.afterEach(function() {
-    page.removeContext();
-  });
-
   test('displays a list of errors', async function(assert) {
     set(this, 'testErrors', ['test1', 'test2']);
     await render(hbs`{{kinetic-form/errors errors=testErrors}}`);

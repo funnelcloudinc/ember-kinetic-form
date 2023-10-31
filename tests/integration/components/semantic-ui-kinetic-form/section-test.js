@@ -8,14 +8,6 @@ import page from '../../../pages/components/semantic-ui-kinetic-form/section';
 module('Integration | Component | semantic ui kinetic form/section', function(hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function() {
-    page.setContext(this);
-  });
-
-  hooks.afterEach(function() {
-    page.removeContext();
-  });
-
   test('displays field.title', async function(assert) {
     set(this, 'testField', {title: 'test title'});
     await render(hbs`{{semantic-ui-kinetic-form/section field=testField}}`);
