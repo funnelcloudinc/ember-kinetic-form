@@ -20,7 +20,11 @@ module.exports = {
     browser: true,
   },
   rules: {
-    'ember/no-jquery': 'error'
+    'ember/no-jquery': 'error',
+    'ember/no-classic-components': 'off',
+    'ember/no-classic-classes': 'off',
+    'ember/require-tagless-components': 'off',
+    'ember/no-actions-hash': 'off'
   },
   overrides: [
     // node files
