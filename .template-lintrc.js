@@ -12,6 +12,7 @@ module.exports = {
     'no-action': false,
     'no-implicit-this': false,
     'no-curly-component-invocation': false,
-    'require-button-type': false
+    'require-button-type': false,
+    'require-input-label': false
   }
 };
