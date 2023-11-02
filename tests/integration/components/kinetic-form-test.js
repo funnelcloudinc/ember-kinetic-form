@@ -10,7 +10,7 @@ import sinon from 'sinon';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../pages/components/kinetic-form';
 import Changeset from 'ember-changeset';
-import isChangeset from 'ember-changeset/utils/is-changeset';
+import { isChangeset } from 'validated-changeset';
 
 module('Integration | Component | kinetic form', function(hooks) {
   setupRenderingTest(hooks);

@@ -9,7 +9,7 @@ import sinon from 'sinon';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../pages/components/semantic-ui-kinetic-form';
 import Changeset from 'ember-changeset';
-import isChangeset from 'ember-changeset/utils/is-changeset';
+import { isChangeset } from 'validated-changeset';
 
 module('Integration | Component | semantic ui kinetic form', function(hooks) {
   setupRenderingTest(hooks);
