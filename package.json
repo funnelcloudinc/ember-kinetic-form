@@ -87,6 +87,7 @@
     "configPath": "tests/dummy/config"
   },
   "volta": {
-    "node": "12.22.12"
+    "node": "16.20.2",
+    "yarn": "1.22.17"
   }
 }
