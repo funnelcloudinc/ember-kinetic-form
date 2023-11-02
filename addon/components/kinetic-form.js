@@ -103,6 +103,10 @@ export default Component.extend({
   }),
 
   validateForm(field) {
+    // Broken metthod: consumer is expecting to validate the full form.
+    if (!field) {
+      throw new TypeError('No `field` argument supplied');
+    }
     let changeset = this.changeset;
     return changeset.validate(field).then(() => {
       set(this, 'showErrors', false);
