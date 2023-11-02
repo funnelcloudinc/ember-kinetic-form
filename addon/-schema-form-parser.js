@@ -1,6 +1,5 @@
 import { A } from '@ember/array';
 import EmberError from '@ember/error';
-import { assign } from '@ember/polyfills';
 import { reads } from '@ember/object/computed';
 import { /* deprecate, */ assert } from '@ember/debug';
 import EmberObject, { computed } from '@ember/object';
@@ -13,9 +12,9 @@ PropertiesUnaccountedForError.prototype = Object.create(EmberError.prototype);
 
 export function normalizeFormElement(element, properties, requiredKeys, lookup) {
   let required = A(requiredKeys).includes(element.key);
-  let property = assign({}, properties[element.key]);
+  let property = Object.assign({}, properties[element.key]);
   let componentName = lookup(element.type || property.type);
-  return assign(property, element, { required, componentName });
+  return Object.assign(property, element, { required, componentName });
 }
 
 export function* normalizeFormElements(form, properties, requiredKeys, lookup) {
@@ -34,7 +33,7 @@ export function* normalizeFormElements(form, properties, requiredKeys, lookup) {
       yield* mapProperties(propertyNames);
     } else if (item.items) {
       let items = [...mapProperties(item.items)];
-      yield* mapProperties([assign({}, item, {items})]);
+      yield* mapProperties([Object.assign({}, item, {items})]);
     } else {
       yield* mapProperties([item]);
     }
