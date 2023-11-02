@@ -23,14 +23,6 @@ export default Route.extend({
             type: 'boolean',
             title: 'frotz'
           },
-          '5': {
-            type: 'select',
-            title: 'Select one',
-            options: [
-              'jam',
-              'honey'
-            ]
-          },
           '6': {
             type: 'passfail',
             title: 'Pass or fail'
@@ -57,7 +49,7 @@ export default Route.extend({
         {
           type: 'section',
           title: 'Section 1',
-          items: [{ key: '2', type: 'radio' }, '1','5','6','7','8']
+          items: [{ key: '2', type: 'radio' }, '1','6','7','8']
         }
       ]
     };
