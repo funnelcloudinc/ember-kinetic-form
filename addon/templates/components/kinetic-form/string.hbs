@@ -1,9 +1,9 @@
 <label>
-  {{field.title}}
-  {{#if field.required}}*{{/if}}
+  {{@field.title}}
+  {{#if @field.required}}*{{/if}}
 </label>
 <input
     type="text"
-    value={{value}}
-    onchange={{action update value="target.value"}}
-    oninput={{action update value="target.value"}}>
+    value={{@value}}
+    onchange={{action @update value="target.value"}}
+    oninput={{action @update value="target.value"}}>

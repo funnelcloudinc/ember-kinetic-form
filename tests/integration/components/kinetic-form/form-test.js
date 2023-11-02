@@ -29,7 +29,7 @@ module('Integration | Component | kinetic form/form', function(hooks) {
   test('calls onSubmit action when user clicks submit button', async function() {
     let onSubmitSpy = sinon.spy();
     set(this, 'onSubmitSpy', onSubmitSpy);
-    await render(hbs`{{kinetic-form/form onSubmit=(action onSubmitSpy)}}`);
+    await render(hbs`{{kinetic-form/form onSubmit=(action this.onSubmitSpy)}}`);
     await page.submitButton.click();
     sinon.assert.calledOnce(onSubmitSpy);
   });

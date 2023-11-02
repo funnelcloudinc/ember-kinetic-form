@@ -35,9 +35,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     });
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.booleanField.isVisible, 'expected boolean field to be visible');
     assert.ok(page.numberField.isVisible, 'expected number field to be visible');
@@ -52,9 +52,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     });
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.stringField.isVisible, 'expected string field to be visible');
   });
@@ -73,9 +73,9 @@ module('Integration | Component | kinetic form', function(hooks) {
       {{kinetic-form
           numberComponent="kinetic-form/boolean"
           foobarComponent="kinetic-form/radios"
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.booleanField.isVisible, 'expected boolean field to be visible');
     assert.ok(page.radiosField.isVisible, 'expected radios field to be visible');
@@ -89,10 +89,10 @@ module('Integration | Component | kinetic form', function(hooks) {
     await render(hbs`
       {{kinetic-form
           showErrors=true
-          changeset=mockChangeset
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          changeset=this.mockChangeset
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.errorsSection.isVisible, 'expected errors section to be visible');
   });
@@ -114,9 +114,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     });
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.notOk(page.booleanField.isVisible, 'expected boolean field to not be visible');
     assert.ok(page.radiosField.isVisible, 'expected radios field to be visible');
@@ -135,9 +135,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     });
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.notOk(page.booleanField.isRequired, 'expected fieldA to not be highlited as required');
     assert.ok(page.stringField.isRequired, 'expected fieldB to be highlited as required');
@@ -147,9 +147,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     set(this, 'testDefinition', {schema: {type: 'object', title: 'test-title', properties: {}}});
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.equal(page.form.title, 'test-title');
   });
@@ -159,9 +159,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     set(this, 'testDefinition', {schema: {type: 'object', properties: {}}});
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     await page.submit();
     sinon.assert.calledWith(this.submitSpy, sinon.match(isChangeset, 'Changeset'));
@@ -180,9 +180,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     });
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     run(() => page.submit());
     sinon.assert.notCalled(this.submitSpy);
@@ -201,10 +201,10 @@ module('Integration | Component | kinetic form', function(hooks) {
     await render(hbs`
       {{kinetic-form
           updateDebounceDelay=0
-          definition=testDefinition
-          model=testModel
-          onUpdate=(action updateSpy)
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onUpdate=(action this.updateSpy)
+          onSubmit=(action this.submitSpy)}}
     `);
     run(() => page.stringField.enterText('foobar'));
     await settled();
@@ -225,10 +225,10 @@ module('Integration | Component | kinetic form', function(hooks) {
     await render(hbs`
       {{kinetic-form
           updateDebounceDelay=0
-          definition=testDefinition
-          model=testModel
-          onUpdate=(action updateSpy)
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onUpdate=(action this.updateSpy)
+          onSubmit=(action this.submitSpy)}}
     `);
     run(() => page.stringField.enterText(''));
     await settled();
@@ -240,9 +240,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     set(this, 'testDefinition', promise);
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.loading.isVisible, 'expected loading component to be visible');
     assert.ok(page.form.isHidden, 'expected form component to be hidden');
@@ -257,9 +257,9 @@ module('Integration | Component | kinetic form', function(hooks) {
     set(this, 'testDefinition', promise);
     await render(hbs`
       {{kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.loading.isVisible, 'expected loading component to be visible');
     assert.ok(page.form.isHidden, 'expected form component to be hidden');

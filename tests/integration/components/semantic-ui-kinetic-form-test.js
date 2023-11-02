@@ -34,9 +34,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     });
     await render(hbs`
       {{semantic-ui-kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.booleanField.isVisible, 'expected boolean field to be visible');
     assert.ok(page.numberField.isVisible, 'expected number field to be visible');
@@ -51,9 +51,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     });
     await render(hbs`
       {{semantic-ui-kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.stringField.isVisible, 'expected string field to be visible');
   });
@@ -72,9 +72,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
       {{semantic-ui-kinetic-form
           numberComponent="semantic-ui-kinetic-form/boolean"
           foobarComponent="semantic-ui-kinetic-form/radios"
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.booleanField.isVisible, 'expected boolean field to be visible');
     assert.ok(page.radiosField.isVisible, 'expected radios field to be visible');
@@ -88,10 +88,10 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     await render(hbs`
       {{semantic-ui-kinetic-form
           showErrors=true
-          changeset=mockChangeset
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          changeset=this.mockChangeset
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.errorsSection.isVisible, 'expected errors section to be visible');
   });
@@ -113,9 +113,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     });
     await render(hbs`
       {{semantic-ui-kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.notOk(page.booleanField.isVisible, 'expected boolean field to not be visible');
     assert.ok(page.radiosField.isVisible, 'expected radios field to be visible');
@@ -134,9 +134,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     });
     await render(hbs`
       {{semantic-ui-kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.notOk(page.booleanField.isRequired, 'expected fieldA to not be highlited as required');
     assert.ok(page.stringField.isRequired, 'expected fieldB to be highlited as required');
@@ -146,9 +146,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     set(this, 'testDefinition', {schema: {type: 'object', title: 'test-title', properties: {}}});
     await render(hbs`
       {{semantic-ui-kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.equal(page.form.title, 'test-title');
   });
@@ -158,9 +158,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     set(this, 'testDefinition', {schema: {type: 'object', properties: {}}});
     await render(hbs`
       {{semantic-ui-kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     await page.submit();
     sinon.assert.calledWith(this.submitSpy, sinon.match(isChangeset, 'Changeset'));
@@ -171,9 +171,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     set(this, 'testDefinition', promise);
     await render(hbs`
       {{semantic-ui-kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.loading.isVisible, 'expected loading component to be visible');
     assert.ok(page.form.isHidden, 'expected form component to be hidden');
@@ -188,9 +188,9 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     set(this, 'testDefinition', promise);
     await render(hbs`
       {{semantic-ui-kinetic-form
-          definition=testDefinition
-          model=testModel
-          onSubmit=(action submitSpy)}}
+          definition=this.testDefinition
+          model=this.testModel
+          onSubmit=(action this.submitSpy)}}
     `);
     assert.ok(page.loading.isVisible, 'expected loading component to be visible');
     assert.ok(page.form.isHidden, 'expected form component to be hidden');

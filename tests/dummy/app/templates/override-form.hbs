@@ -1,3 +1,3 @@
-<SemanticUiKineticForm @formComponent="test-override-form" @definition={{sampleDefinition}} @model={{sampleModel}} @onSubmit={{action "sendToServer"}} />
+<SemanticUiKineticForm @formComponent="test-override-form" @definition={{this.sampleDefinition}} @model={{this.sampleModel}} @onSubmit={{action "sendToServer"}} />
 
-<span class="on-submit-did-validations">{{lastSubmitValidated}}</span>
+<span class="on-submit-did-validations">{{this.lastSubmitValidated}}</span>

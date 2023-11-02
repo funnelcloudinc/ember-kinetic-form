@@ -1,12 +1,12 @@
-<h3 class="ui dividing header">{{title}}</h3>
+<h3 class="ui dividing header">{{@title}}</h3>
 
 <div class="ui very relaxed divided items">
   {{yield}}
 </div>
 
-{{#unless readOnly}}
+{{#unless @readOnly}}
   <div class="actions">
-    <button class="ui positive huge button" type="submit" disabled={{isInvalid}}>
+    <button class="ui positive huge button" type="submit" disabled={{@isInvalid}}>
       Submit
     </button>
   </div>

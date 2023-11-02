@@ -1,16 +1,16 @@
 <div class="middle aligned content">
-  <div class="field {{if error 'error'}} {{if field.required 'required'}}">
-    <label>{{field.title}}</label>
+  <div class="field {{if @error 'error'}} {{if @field.required 'required'}}">
+    <label>{{@field.title}}</label>
     <div class="ui form">
       <div class="ui segments">
         <div class="ui segment info message">
-          {{t (if field.allow_multiple_choice 'selectMultipleChoices' 'selectSingleChoice')}}
+          {{t (if @field.allow_multiple_choice 'selectMultipleChoices' 'selectSingleChoice')}}
         </div>
-        {{#each field.multiple_choice_options as |option index|}}
-          <div class="ui {{if (object-at index value) 'secondary'}} segment" onClick={{action 'updateChoice' index}}>
+        {{#each @field.multiple_choice_options as |option index|}}
+          <div class="ui {{if (object-at index @value) 'secondary'}} segment" onClick={{action 'updateChoice' index}}>
             <label>
-              <i class="blue large {{if field.allow_multiple_choice 'square' 'circle'}} 
-                {{unless (object-at index value) 'grey outline'}} icon">
+              <i class="blue large {{if @field.allow_multiple_choice 'square' 'circle'}} 
+                {{unless (object-at index @value) 'grey outline'}} icon">
               </i>
               {{option}}
             </label>

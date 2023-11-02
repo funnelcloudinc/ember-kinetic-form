@@ -1,12 +1,12 @@
 <label>
-  {{field.title}}
-  {{#if field.required}}*{{/if}}
+  {{@field.title}}
+  {{#if @field.required}}*{{/if}}
 </label>
-<select onchange={{action update value="target.value"}}>
-  {{#if showPrompt}}
-    <option value="" selected={{hasNoValue}}>--</option>
+<select onchange={{action @update value="target.value"}}>
+  {{#if this.showPrompt}}
+    <option value="" selected={{this.hasNoValue}}>--</option>
   {{/if}}
-  {{#each options as |opt|}}
+  {{#each this.options as |opt|}}
     <option
         value={{opt.value}}
         selected={{opt.selected}}>
