@@ -89,7 +89,7 @@ module('Integration | Component | kinetic form', function(hooks) {
     await render(hbs`
       {{kinetic-form
           showErrors=true
-          changeset=this.mockChangeset
+          changesetOverride=this.mockChangeset
           definition=this.testDefinition
           model=this.testModel
           onSubmit=(action this.submitSpy)}}

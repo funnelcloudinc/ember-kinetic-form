@@ -88,7 +88,7 @@ module('Integration | Component | semantic ui kinetic form', function(hooks) {
     await render(hbs`
       {{semantic-ui-kinetic-form
           showErrors=true
-          changeset=this.mockChangeset
+          changesetOverride=this.mockChangeset
           definition=this.testDefinition
           model=this.testModel
           onSubmit=(action this.submitSpy)}}

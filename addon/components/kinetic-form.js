@@ -64,8 +64,10 @@ export default Component.extend({
     }
   }),
 
-  changeset: computed('{model,validators}', {
+  changeset: computed('{model,validators,changesetOverride}', {
     get() {
+      if (this.changesetOverride) return this.changesetOverride;
+
       let model = this.model;
       let validations = this.validators;
       let changeset = new Changeset(model, lookupValidator(validations), validations, { skipValidate: true });
