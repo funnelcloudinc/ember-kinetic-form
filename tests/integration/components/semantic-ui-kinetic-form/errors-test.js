@@ -9,7 +9,7 @@ module('Integration | Component | semantic ui kinetic form/errors', function(hoo
   setupRenderingTest(hooks);
 
   test('displays a list of errors', async function(assert) {
-    set(this, 'testErrors', ['test1', 'test2']);
+    set(this, 'testErrors', [{ validation: 'test1' }, { validation: 'test2' }]);
     await render(hbs`{{semantic-ui-kinetic-form/errors errors=this.testErrors}}`);
     assert.equal(page.messages(0).text, 'test1');
     assert.equal(page.messages(1).text, 'test2');
