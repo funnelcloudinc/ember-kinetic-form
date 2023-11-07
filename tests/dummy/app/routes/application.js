@@ -41,7 +41,8 @@ export default Route.extend({
             ],
             allow_multiple_choice: true
           }
-        }
+        },
+        required: ['7','8']
       },
       form: [
         '3',

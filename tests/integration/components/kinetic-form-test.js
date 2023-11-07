@@ -3,7 +3,7 @@ import { run } from '@ember/runloop';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { Promise } from 'rsvp';
-import { module, skip, test } from 'qunit';
+import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, settled } from '@ember/test-helpers';
 import sinon from 'sinon';
@@ -154,8 +154,7 @@ module('Integration | Component | kinetic form', function(hooks) {
     assert.equal(page.form.title, 'test-title');
   });
 
-  // skipping as form validation is broken
-  skip('calls onSubmit action when user submits the form', async function() {
+  test('calls onSubmit action when user submits the form', async function() {
     set(this, 'testDefinition', {schema: {type: 'object', properties: {}}});
     await render(hbs`
       {{kinetic-form
@@ -167,8 +166,7 @@ module('Integration | Component | kinetic form', function(hooks) {
     sinon.assert.calledWith(this.submitSpy, sinon.match(isChangeset, 'Changeset'));
   });
 
-  // skipping as form validation is broken
-  skip('does not call onSubmit action when user submits the form but is invalid', async function() {
+  test('does not call onSubmit action when user submits the form but is invalid', async function() {
     set(this, 'testDefinition', {
       schema: {
         type: 'object',

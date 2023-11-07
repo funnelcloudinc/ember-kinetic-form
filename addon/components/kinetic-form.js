@@ -1,6 +1,5 @@
 import { alias, reads } from '@ember/object/computed';
 import Component from '@ember/component';
-import { isNone } from '@ember/utils';
 import { computed, set, get } from '@ember/object';
 import { A } from '@ember/array';
 import { resolve } from 'rsvp';
@@ -55,7 +54,10 @@ export default Component.extend({
           if (!item.key) {
             continue;
           }
-          validators[item.key] = validatorsFor(item);
+          const validator = validatorsFor(item);
+          if (validator) {
+            validators[item.key] = validator;
+          }
         }
       }
 
@@ -103,17 +105,10 @@ export default Component.extend({
     }
   }),
 
-  validateForm(field) {
-    // Broken metthod: consumer is expecting to validate the full form.
-    if (!field) {
-      throw new TypeError('No `field` argument supplied');
-    }
+  validateForm() {
     let changeset = this.changeset;
-    return changeset.validate(field).then(() => {
+    return changeset.validate().then(() => {
       set(this, 'showErrors', false);
-      if (field && isNone(get(changeset, `error.${field}`))) {
-        return true;
-      }
       if (changeset.isValid) {
         return true;
       }
