@@ -9,10 +9,10 @@ export const KineticFormForm = {
   submitButton: {
     scope: 'button[type=submit]',
     isDisabled: property('disabled'),
-    isEnabled: getter(function() {
+    isEnabled: getter(function () {
       return !this.isDisabled;
     }),
-  }
+  },
 };
 
 export default PageObject.create(KineticFormForm);

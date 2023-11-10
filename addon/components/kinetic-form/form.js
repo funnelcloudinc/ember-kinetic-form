@@ -10,5 +10,5 @@ export default Component.extend({
     evt.preventDefault();
     this.onSubmit();
     return false;
-  }
+  },
 });

@@ -5,5 +5,5 @@ export default Component.extend({
   layout,
   tagName: 'fieldset',
   classNames: ['kinetic-form--string'],
-  classNameBindings: ['error:has-error']
+  classNameBindings: ['error:has-error'],
 });

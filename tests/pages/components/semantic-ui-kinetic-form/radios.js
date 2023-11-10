@@ -11,7 +11,7 @@ export const SemanticUIKineticFormRadios = {
   isOff: hasClass('active', 'button.green'),
   turnOn: clickable('button.red'),
   turnOff: clickable('button.green'),
-  isRequired: hasClass('required', '.field')
+  isRequired: hasClass('required', '.field'),
 };
 
 export default PageObject.create(SemanticUIKineticFormRadios);

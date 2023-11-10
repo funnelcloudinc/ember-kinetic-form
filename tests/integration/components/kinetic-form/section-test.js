@@ -5,23 +5,26 @@ import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/kinetic-form/section';
 
-module('Integration | Component | kinetic form/section', function(hooks) {
+module('Integration | Component | kinetic form/section', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('displays field.title', async function(assert) {
-    set(this, 'testField', {title: 'test title'});
+  test('displays field.title', async function (assert) {
+    set(this, 'testField', { title: 'test title' });
     await render(hbs`{{kinetic-form/section field=this.testField}}`);
-    assert.ok(page.hasInTitle('test title'), 'expected field.title to be displayed');
+    assert.ok(
+      page.hasInTitle('test title'),
+      'expected field.title to be displayed'
+    );
   });
 
-  test('displays provides a linkable anchor', async function(assert) {
-    set(this, 'testField', {title: 'test title'});
+  test('displays provides a linkable anchor', async function (assert) {
+    set(this, 'testField', { title: 'test title' });
     await render(hbs`{{kinetic-form/section field=this.testField}}`);
-    assert.equal(page.anchor, 'test-title');
+    assert.strictEqual(page.anchor, 'test-title');
   });
 
-  test('yields field.items', async function(assert) {
-    set(this, 'testField', {title: 'test-title', items: ['1', '2', '3']});
+  test('yields field.items', async function (assert) {
+    set(this, 'testField', { title: 'test-title', items: ['1', '2', '3'] });
     await render(hbs`
       {{#kinetic-form/section field=this.testField as |item|}}
         test-{{item}}

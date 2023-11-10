@@ -10,6 +10,6 @@ export default Component.extend({
   actions: {
     toggle() {
       this.update(!this.value);
-    }
-  }
+    },
+  },
 });

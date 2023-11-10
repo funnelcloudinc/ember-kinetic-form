@@ -19,6 +19,6 @@ export default Controller.extend({
           return resolve();
         }, 3000);
       });
-    }
-  }
+    },
+  },
 });

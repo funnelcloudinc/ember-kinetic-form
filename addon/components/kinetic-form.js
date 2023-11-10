@@ -63,7 +63,7 @@ export default Component.extend({
 
       buildValidators(properties);
       return validators;
-    }
+    },
   }),
 
   changeset: computed('{model,validators,changesetOverride}', {
@@ -72,38 +72,58 @@ export default Component.extend({
 
       let model = this.model;
       let validations = this.validators;
-      let changeset = new Changeset(model, lookupValidator(validations), validations, { skipValidate: true });
+      let changeset = new Changeset(
+        model,
+        lookupValidator(validations),
+        validations,
+        { skipValidate: true }
+      );
       return changeset;
-    }
+    },
   }),
 
   decoratedDefinition: computed('definition', {
     get() {
       let promise = resolve(this.definition);
       return DefinitionDecorator.create({ promise });
-    }
+    },
   }),
 
-  schemaParser: computed('{decoratedDefinition.schema,decoratedDefinition.form,_schemaParser}', {
-    get() {
-      const lookupComponentName = type => {
-        return get(this, `${type}Component`) || get(this, DEFAULT_COMPONENT_NAME_PROP);
-      };
-      let schema = this.decoratedDefinition.get('schema') || {};
-      let form = A(this.decoratedDefinition.get('form') || []);
-      let existingSchemaParser = this._schemaParser;
+  schemaParser: computed(
+    '{decoratedDefinition.schema,decoratedDefinition.form,_schemaParser}',
+    {
+      get() {
+        const lookupComponentName = (type) => {
+          return (
+            get(this, `${type}Component`) ||
+            get(this, DEFAULT_COMPONENT_NAME_PROP)
+          );
+        };
+        let schema = this.decoratedDefinition.get('schema') || {};
+        let form = A(this.decoratedDefinition.get('form') || []);
+        let existingSchemaParser = this._schemaParser;
 
-      if (existingSchemaParser && !Object.keys(schema).length && !form.length) {
-        return existingSchemaParser;
-      }
+        if (
+          existingSchemaParser &&
+          !Object.keys(schema).length &&
+          !form.length
+        ) {
+          return existingSchemaParser;
+        }
 
-      let schemaFormParser = SchemaFormParser.create({ schema, form, lookupComponentName });
+        let schemaFormParser = SchemaFormParser.create({
+          schema,
+          form,
+          lookupComponentName,
+        });
 
-      set(this, '_schemaParser', schemaFormParser);
+        // eslint-disable-next-line ember/no-side-effects
+        set(this, '_schemaParser', schemaFormParser);
 
-      return schemaFormParser;
+        return schemaFormParser;
+      },
     }
-  }),
+  ),
 
   validateForm() {
     let changeset = this.changeset;
@@ -123,7 +143,7 @@ export default Component.extend({
     return { changeset };
   },
 
-  submitTask: task(function*({ changeset, validate }) {
+  submitTask: task(function* ({ changeset, validate }) {
     if (validate) {
       let isValid = yield this.validateForm();
       if (!isValid) return;
@@ -134,7 +154,7 @@ export default Component.extend({
   }),
 
   // Wrap `onSubmit` action in a task so we can use the tasks derived state to handle UI state
-  onSubmitTask: task(function*({ changeset, complete }) {
+  onSubmitTask: task(function* ({ changeset, complete }) {
     return yield this.onSubmit(changeset, complete);
   }),
 
@@ -154,6 +174,6 @@ export default Component.extend({
       if (this.readOnly) return;
       let changeset = this.changeset;
       return this.submitTask.perform({ changeset, validate });
-    }
-  }
+    },
+  },
 });

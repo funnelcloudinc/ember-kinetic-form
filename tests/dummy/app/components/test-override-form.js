@@ -4,6 +4,6 @@ export default SemanticUiKineticFormForm.extend({
   actions: {
     saveAsIncomplete() {
       this.onSubmit(false);
-    }
-  }
+    },
+  },
 });

@@ -11,12 +11,12 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    const value = this.value
+    const value = this.value;
 
     if (!value) {
       const numberOfChoices = this.field.multiple_choice_options.length;
       const initialValue = Array(numberOfChoices).fill(false);
-  
+
       set(this, 'workingValue', initialValue);
     } else {
       set(this, 'workingValue', [...value]);
@@ -36,16 +36,16 @@ export default Component.extend({
         updatedValue = A(Array(numberOfChoices).fill(false));
       }
 
-      updatedValue.replace(index, 1, [ !choices[index] ]);
+      updatedValue.replace(index, 1, [!choices[index]]);
 
       set(this, 'workingValue', [...updatedValue]);
 
-      if (updatedValue.every(a => !a)) {
+      if (updatedValue.every((a) => !a)) {
         // Reset to no input if no answers are selected.
-        this.update('');  
+        this.update('');
       } else {
         this.update(updatedValue);
       }
-    }
-  }
+    },
+  },
 });

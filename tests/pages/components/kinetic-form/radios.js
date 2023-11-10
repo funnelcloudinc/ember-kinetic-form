@@ -15,8 +15,8 @@ export const KineticFormRadios = {
     isDescriptor: true,
     get() {
       return this.hasInTitle('*');
-    }
-  }
+    },
+  },
 };
 
 export default PageObject.create(KineticFormRadios);

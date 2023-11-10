@@ -11,6 +11,6 @@ export default Controller.extend({
   actions: {
     sendToServer(changeset, validated) {
       set(this, 'lastSubmitValidated', validated);
-    }
-  }
+    },
+  },
 });

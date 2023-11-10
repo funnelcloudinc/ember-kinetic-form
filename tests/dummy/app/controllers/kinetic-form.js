@@ -14,6 +14,6 @@ export default Controller.extend({
     update() {
       // eslint-disable-next-line no-console
       console.log('update fired');
-    }
-  }
+    },
+  },
 });

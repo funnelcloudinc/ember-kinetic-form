@@ -6,7 +6,7 @@ export default class Router extends EmberRouter {
   rootURL = config.rootURL;
 }
 
-Router.map(function() {
+Router.map(function () {
   this.route('kinetic-form');
   this.route('semantic-ui-kinetic-form');
   this.route('override-form');

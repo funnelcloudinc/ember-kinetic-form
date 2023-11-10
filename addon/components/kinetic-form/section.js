@@ -11,6 +11,6 @@ export default Component.extend({
     get() {
       let title = this.field.title || `section-${this.elementId}`;
       return dasherize(title);
-    }
-  })
+    },
+  }),
 });

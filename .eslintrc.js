@@ -27,7 +27,8 @@ module.exports = {
     'ember/no-classic-components': 'off',
     'ember/no-classic-classes': 'off',
     'ember/require-tagless-components': 'off',
-    'ember/no-actions-hash': 'off'
+    'ember/no-actions-hash': 'off',
+    'ember/no-yield-only': 'off',
   },
   overrides: [
     // node files

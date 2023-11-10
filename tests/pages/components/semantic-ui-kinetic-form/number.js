@@ -9,7 +9,7 @@ export const SemanticUIKineticFormNumber = {
   enterText: fillable('input'),
   hasInTitle: contains('label'),
   hasError: hasClass('error', '.field'),
-  isRequired: hasClass('required', '.field')
+  isRequired: hasClass('required', '.field'),
 };
 
 export default PageObject.create(SemanticUIKineticFormNumber);
