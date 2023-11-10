@@ -1,10 +1,10 @@
-<h1>{{title}}</h1>
+<h1>{{@title}}</h1>
 
 {{yield}}
 
-{{#unless readOnly}}
+{{#unless @readOnly}}
   <fieldset>
-    <button type="submit" disabled={{isInvalid}}>
+    <button type="submit" disabled={{@isInvalid}}>
       Submit
     </button>
   </fieldset>

@@ -1,7 +1,6 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { not } from '@ember/object/computed';
 import layout from '../../templates/components/kinetic-form/radios';
-
-const { Component, computed: { not } } = Ember;
 
 export default Component.extend({
   layout,
@@ -12,5 +11,5 @@ export default Component.extend({
   onLabel: 'ON',
   offLabel: 'OFF',
 
-  notValue: not('value')
+  notValue: not('value'),
 });

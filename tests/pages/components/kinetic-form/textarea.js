@@ -13,8 +13,8 @@ export const KineticFormTextarea = {
     isDescriptor: true,
     get() {
       return this.hasInTitle('*');
-    }
-  }
+    },
+  },
 };
 
 export default PageObject.create(KineticFormTextarea);

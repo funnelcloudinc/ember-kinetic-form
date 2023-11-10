@@ -1,7 +1,7 @@
-<h2 id={{anchor}} class="ui dividing header">
-  {{field.title}}
+<h2 id={{this.anchor}} class="ui dividing header">
+  {{@field.title}}
 </h2>
 
-{{#each field.items as |item|}}
+{{#each @field.items as |item|}}
   {{yield item}}
 {{/each}}

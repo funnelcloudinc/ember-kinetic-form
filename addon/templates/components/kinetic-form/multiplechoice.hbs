@@ -1,15 +1,15 @@
 <div>
   <div>
-    <label>{{field.title}}</label>
+    <label>{{@field.title}}</label>
     <div>
       <div>
         <div>
-          {{if field.allow_multiple_choice 'Select Multiple Choices' 'Select Single Choice'}}
+          {{if @field.allow_multiple_choice 'Select Multiple Choices' 'Select Single Choice'}}
         </div>
-        {{#each field.multiple_choice_options as |option index|}}
+        {{#each @field.multiple_choice_options as |option index|}}
           <div onClick={{action 'updateChoice' index}}>
             <label>
-              <input type="checkbox" checked={{object-at index value}}>
+              <input type="checkbox" checked={{object-at index @value}}>
               {{option}}
             </label>
           </div>

@@ -1,51 +1,66 @@
-import Ember from 'ember';
-import { moduleForComponent, test } from 'ember-qunit';
+import { run } from '@ember/runloop';
+import { set } from '@ember/object';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/kinetic-form/string';
 import sinon from 'sinon';
 
-const { run, set, get } = Ember;
+module('Integration | Component | kinetic form/string', function (hooks) {
+  setupRenderingTest(hooks);
 
-moduleForComponent('kinetic-form/string', 'Integration | Component | kinetic form/string', {
-  integration: true,
-  beforeEach() {
-    page.setContext(this);
+  hooks.beforeEach(function () {
     set(this, 'updateSpy', sinon.spy());
-  },
-  afterEach() {
-    page.removeContext();
-  }
-});
+  });
 
-test('displays field.title', function(assert) {
-  set(this, 'testField', {title: 'test-title'});
-  page.render(hbs`{{kinetic-form/string field=testField update=(action updateSpy)}}`);
-  assert.ok(page.hasInTitle('test-title'), 'expected field.title to be displayed');
-});
+  test('displays field.title', async function (assert) {
+    set(this, 'testField', { title: 'test-title' });
+    await render(
+      hbs`{{kinetic-form/string field=this.testField update=(action this.updateSpy)}}`
+    );
+    assert.ok(
+      page.hasInTitle('test-title'),
+      'expected field.title to be displayed'
+    );
+  });
 
-test('highlights as required when field.required is true', function(assert) {
-  set(this, 'testField', {required: false});
-  page.render(hbs`{{kinetic-form/string field=testField update=(action updateSpy)}}`);
-  assert.notOk(page.isRequired, 'expected component to not be highlighted as required');
-  run(() => set(this, 'testField.required', true));
-  assert.ok(page.isRequired, 'expected component to be highlighted as required');
-});
+  test('highlights as required when field.required is true', async function (assert) {
+    set(this, 'testField', { required: false });
+    await render(
+      hbs`{{kinetic-form/string field=this.testField update=(action this.updateSpy)}}`
+    );
+    assert.notOk(
+      page.isRequired,
+      'expected component to not be highlighted as required'
+    );
+    run(() => set(this, 'testField.required', true));
+    assert.ok(
+      page.isRequired,
+      'expected component to be highlighted as required'
+    );
+  });
 
-test('shows the current value', function(assert) {
-  page.render(hbs`{{kinetic-form/string value="test-value" update=(action updateSpy)}}`);
-  assert.equal(page.value, 'test-value');
-});
+  test('shows the current value', async function (assert) {
+    await render(
+      hbs`{{kinetic-form/string value="test-value" update=(action this.updateSpy)}}`
+    );
+    assert.strictEqual(page.value, 'test-value');
+  });
 
-test('calls update action when user enters text', function() {
-  page.render(hbs`{{kinetic-form/string update=(action updateSpy)}}`);
-  run(() => page.enterText('test-text'));
-  sinon.assert.calledWith(get(this, 'updateSpy'), 'test-text');
-});
+  test('calls update action when user enters text', async function () {
+    await render(hbs`{{kinetic-form/string update=(action this.updateSpy)}}`);
+    await page.enterText('test-text');
+    sinon.assert.calledWith(this.updateSpy, 'test-text');
+  });
 
-test('highlights as an error when error is truthy', function(assert) {
-  set(this, 'testError', null);
-  page.render(hbs`{{kinetic-form/string error=testError update=(action updateSpy)}}`);
-  assert.notOk(page.hasError, 'expected to not have error highlight');
-  run(() => set(this, 'testError', {message: 'test-error'}));
-  assert.ok(page.hasError, 'expected to have error highlight');
+  test('highlights as an error when error is truthy', async function (assert) {
+    set(this, 'testError', null);
+    await render(
+      hbs`{{kinetic-form/string error=this.testError update=(action this.updateSpy)}}`
+    );
+    assert.notOk(page.hasError, 'expected to not have error highlight');
+    run(() => set(this, 'testError', { message: 'test-error' }));
+    assert.ok(page.hasError, 'expected to have error highlight');
+  });
 });

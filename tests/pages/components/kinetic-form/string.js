@@ -13,8 +13,8 @@ export const KineticFormString = {
     isDescriptor: true,
     get() {
       return this.hasInTitle('*');
-    }
-  }
+    },
+  },
 };
 
 export default PageObject.create(KineticFormString);

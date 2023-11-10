@@ -1,12 +1,12 @@
 <div class="middle aligned content">
-  <div class="field {{if error 'error'}} {{if field.required 'required'}}">
-    <label>{{field.title}}</label>
-    <div class="{{if value 'extra'}}">
-      <button style="{{if value 'margin-top: 0px;'}}" class="ui right floated massive circular icon {{if value 'green' 'basic red'}} button" {{action "toggle"}}>
-        <i class="{{if value 'check' 'remove'}} icon"></i>
+  <div class="field {{if @error 'error'}} {{if @field.required 'required'}}">
+    <label>{{@field.title}}</label>
+    <div class={{if @value 'extra'}}>
+      <button style={{if @value 'margin-top: 0px;'}} class="ui right floated massive circular icon {{if @value 'green' 'basic red'}} button" {{action "toggle"}}>
+        <i class="{{if @value 'check' 'remove'}} icon"></i>
       </button>
       <p style="margin-top: 10px; font-size: 1.3em; margin-right:15%;">
-      {{field.description}}
+      {{@field.description}}
       </p>
     </div>
   </div>

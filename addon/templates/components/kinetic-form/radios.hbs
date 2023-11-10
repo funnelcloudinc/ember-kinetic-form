@@ -1,20 +1,20 @@
 <label class="kinetic-form--radios__title">
-  {{field.title}}
-  {{#if field.required}}*{{/if}}
+  {{@field.title}}
+  {{#if @field.required}}*{{/if}}
 </label>
 <label>
   <input
       type="radio"
       class="kinetic-form--radios__on"
-      checked={{value}}
-      onclick={{action update true}}>
-  {{onLabel}}
+      checked={{@value}}
+      onclick={{action @update true}}>
+  {{this.onLabel}}
 </label>
 <label>
   <input
       type="radio"
       class="kinetic-form--radios__off"
-      checked={{notValue}}
-      onclick={{action update false}}>
-  {{offLabel}}
+      checked={{this.notValue}}
+      onclick={{action @update false}}>
+  {{this.offLabel}}
 </label>

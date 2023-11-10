@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { set } from '@ember/object';
 import layout from '../../templates/components/kinetic-form/multiplechoice';
-
-const { Component, get, set } = Ember;
+import { A } from '@ember/array';
 
 export default Component.extend({
   layout,
@@ -11,12 +11,12 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    const value = get(this, 'value')
+    const value = this.value;
 
     if (!value) {
-      const numberOfChoices = get(this, 'field.multiple_choice_options.length');
+      const numberOfChoices = this.field.multiple_choice_options.length;
       const initialValue = Array(numberOfChoices).fill(false);
-  
+
       set(this, 'workingValue', initialValue);
     } else {
       set(this, 'workingValue', [...value]);
@@ -26,26 +26,26 @@ export default Component.extend({
   actions: {
     updateChoice(index) {
       let updatedValue;
-      const choices = get(this, 'workingValue');
+      const choices = this.workingValue;
 
-      if (get(this, 'field.allow_multiple_choice')) {
-        updatedValue = [...choices];  
+      if (this.field.allow_multiple_choice) {
+        updatedValue = A([...choices]);
       } else {
-        const numberOfChoices = get(this, 'field.multiple_choice_options.length');
+        const numberOfChoices = this.field.multiple_choice_options.length;
 
-        updatedValue = Array(numberOfChoices).fill(false);
+        updatedValue = A(Array(numberOfChoices).fill(false));
       }
 
-      updatedValue.replace(index, 1, [ !choices[index] ]);
+      updatedValue.replace(index, 1, [!choices[index]]);
 
       set(this, 'workingValue', [...updatedValue]);
 
-      if (updatedValue.every(a => !a)) {
+      if (updatedValue.every((a) => !a)) {
         // Reset to no input if no answers are selected.
-        get(this, 'update')('');  
+        this.update('');
       } else {
-        get(this, 'update')(updatedValue);
+        this.update(updatedValue);
       }
-    }
-  }
+    },
+  },
 });

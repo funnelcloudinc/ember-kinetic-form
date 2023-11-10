@@ -6,7 +6,7 @@ export const KineticFormSection = {
   scope: '.kinetic-form--section',
   anchor: attribute('id', 'h2'),
   title: text('h2'),
-  hasInTitle: contains('h2')
+  hasInTitle: contains('h2'),
 };
 
 export default PageObject.create(KineticFormSection);

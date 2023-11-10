@@ -9,7 +9,7 @@ export const SemanticUIKineticFormBoolean = {
   isChecked: hasClass('green', 'button'),
   hasError: hasClass('error', '.field'),
   toggle: clickable('button'),
-  isRequired: hasClass('required', '.field')
+  isRequired: hasClass('required', '.field'),
 };
 
 export default PageObject.create(SemanticUIKineticFormBoolean);

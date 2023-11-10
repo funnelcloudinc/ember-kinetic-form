@@ -14,7 +14,7 @@ import { SemanticUIKineticFormTextarea } from './semantic-ui-kinetic-form/textar
 export const KinenticForm = {
   scope: '.semantic-ui-kinetic-form',
   form: SemanticUIKineticFormForm,
-  loading: {scope: '.semantic-ui-kinetic-form--loading'},
+  loading: { scope: '.semantic-ui-kinetic-form--loading' },
   errorsSection: SemanticUIKineticFormErrors,
   booleanField: SemanticUIKineticFormBoolean,
   numberField: SemanticUIKineticFormNumber,
@@ -23,7 +23,7 @@ export const KinenticForm = {
   textareaField: SemanticUIKineticFormTextarea,
   submit() {
     return this.form.submitButton.click();
-  }
+  },
 };
 
 export default PageObject.create(KinenticForm);
