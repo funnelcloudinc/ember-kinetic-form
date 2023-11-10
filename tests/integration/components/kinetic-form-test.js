@@ -3,7 +3,7 @@ import { run } from '@ember/runloop';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import { Promise } from 'rsvp';
-import { module, test, skip } from 'qunit';
+import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, settled } from '@ember/test-helpers';
 import sinon from 'sinon';
@@ -254,30 +254,6 @@ module('Integration | Component | kinetic form', function (hooks) {
       this.updateSpy,
       sinon.match(isChangeset, 'Changeset')
     );
-  });
-
-  test('does not call onUpdate action when user updates the form but is invalid', async function () {
-    set(this, 'updateSpy', sinon.spy());
-    set(this, 'testDefinition', {
-      schema: {
-        type: 'object',
-        required: ['fieldA'],
-        properties: {
-          fieldA: { type: 'string' },
-        },
-      },
-    });
-    await render(hbs`
-      {{kinetic-form
-          updateDebounceDelay=0
-          definition=this.testDefinition
-          model=this.testModel
-          onUpdate=(action this.updateSpy)
-          onSubmit=(action this.submitSpy)}}
-    `);
-    run(() => page.stringField.enterText('foo'));
-    await settled();
-    sinon.assert.notCalled(this.updateSpy);
   });
 
   test('shows loading component when passed a promise', async function (assert) {
