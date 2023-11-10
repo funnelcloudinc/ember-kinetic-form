@@ -3,5 +3,5 @@ import layout from '../../templates/components/semantic-ui-kinetic-form/multiple
 
 export default KineticMultipleChoiceInstructionsComponent.extend({
   layout,
-  classNames: ['semantic-ui-kinetic-form--multiplechoice', 'item']
+  classNames: ['semantic-ui-kinetic-form--multiplechoice', 'item'],
 });

@@ -1,42 +1,47 @@
-import Ember from 'ember';
-import { moduleForComponent, test } from 'ember-qunit';
+import { set } from '@ember/object';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import page from '../../../pages/components/kinetic-form/form';
 import sinon from 'sinon';
 
-const { run, set } = Ember;
+module('Integration | Component | kinetic form/form', function (hooks) {
+  setupRenderingTest(hooks);
 
-moduleForComponent('kinetic-form/form', 'Integration | Component | kinetic form/form', {
-  integration: true,
-  beforeEach() {
-    page.setContext(this);
-  },
-  afterEach() {
-    page.removeContext();
-  }
-});
+  test('yields a block', async function (assert) {
+    await render(
+      hbs`{{#kinetic-form/form}}Test block content{{/kinetic-form/form}}`
+    );
+    assert.ok(
+      page.text.includes('Test block content'),
+      'expected component to render block content'
+    );
+  });
 
-test('yields a block', function (assert) {
-  page.render(hbs`{{#kinetic-form/form}}Test block content{{/kinetic-form/form}}`);
-  assert.ok(page.text.includes('Test block content'), 'expected component to render block content');
-});
+  test('displays a title', async function (assert) {
+    await render(hbs`{{kinetic-form/form title="test-title"}}`);
+    assert.strictEqual(page.title, 'test-title');
+  });
 
-test('displays a title', function(assert) {
-  page.render(hbs`{{kinetic-form/form title="test-title"}}`);
-  assert.equal(page.title, 'test-title');
-});
+  test('disables submit button when isInvalid is true', async function (assert) {
+    await render(hbs`{{kinetic-form/form isInvalid=false}}`);
+    assert.ok(
+      page.submitButton.isEnabled,
+      'expected submit button to be enabled'
+    );
+    await render(hbs`{{kinetic-form/form isInvalid=true}}`);
+    assert.ok(
+      page.submitButton.isDisabled,
+      'expected submit button to be disabled'
+    );
+  });
 
-test('disables submit button when isInvalid is true', function (assert) {
-  page.render(hbs`{{kinetic-form/form isInvalid=false}}`);
-  assert.ok(page.submitButton.isEnabled, 'expected submit button to be enabled');
-  page.render(hbs`{{kinetic-form/form isInvalid=true}}`);
-  assert.ok(page.submitButton.isDisabled, 'expected submit button to be disabled');
-});
-
-test('calls onSubmit action when user clicks submit button', function () {
-  let onSubmitSpy = sinon.spy();
-  set(this, 'onSubmitSpy', onSubmitSpy);
-  page.render(hbs`{{kinetic-form/form onSubmit=(action onSubmitSpy)}}`);
-  run(() => page.submitButton.click());
-  sinon.assert.calledOnce(onSubmitSpy);
+  test('calls onSubmit action when user clicks submit button', async function () {
+    let onSubmitSpy = sinon.spy();
+    set(this, 'onSubmitSpy', onSubmitSpy);
+    await render(hbs`{{kinetic-form/form onSubmit=(action this.onSubmitSpy)}}`);
+    await page.submitButton.click();
+    sinon.assert.calledOnce(onSubmitSpy);
+  });
 });

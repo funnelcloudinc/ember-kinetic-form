@@ -1,9 +1,10 @@
-import Ember from 'ember';
-
-const { Route } = Ember;
+import Route from '@ember/routing/route';
 
 export default Route.extend({
   model() {
-    return this.modelFor('application');
-  }
+    const model = this.modelFor('application');
+
+    delete model.schema.required;
+    return model;
+  },
 });

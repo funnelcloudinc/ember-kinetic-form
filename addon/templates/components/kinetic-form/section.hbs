@@ -1,5 +1,5 @@
-<h2 id={{anchor}}>{{field.title}}</h2>
+<h2 id={{this.anchor}}>{{@field.title}}</h2>
 
-{{#each field.items as |item|}}
+{{#each @field.items as |item|}}
   {{yield item}}
 {{/each}}

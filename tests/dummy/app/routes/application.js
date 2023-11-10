@@ -1,6 +1,4 @@
-import Ember from 'ember';
-
-const { Route } = Ember;
+import Route from '@ember/routing/route';
 
 export default Route.extend({
   model() {
@@ -9,49 +7,38 @@ export default Route.extend({
         title: 'foobar',
         type: 'object',
         properties: {
-          '1': {
+          1: {
             type: 'boolean',
-            title: 'foo'
+            title: 'foo',
           },
-          '2': {
+          2: {
             type: 'boolean',
-            title: 'bar craig'
+            title: 'bar craig',
           },
-          '3': {
+          3: {
             type: 'boolean',
-            title: 'baz'
+            title: 'baz',
           },
-          '4': {
+          4: {
             type: 'boolean',
-            title: 'frotz'
+            title: 'frotz',
           },
-          '5': {
-            type: 'select',
-            title: 'Select one',
-            options: [
-              'jam',
-              'honey'
-            ]
-          },
-          '6': {
+          6: {
             type: 'passfail',
-            title: 'Pass or fail'
+            title: 'Pass or fail',
           },
-          '7': {
+          7: {
             type: 'instructions',
-            title: 'Here are my instructions'
+            title: 'Here are my instructions',
           },
-          '8': {
+          8: {
             type: 'multiplechoice',
             title: 'Choose many',
-            multiple_choice_options: [
-              'Happy',
-              'Sad',
-              "Undecided"
-            ],
-            allow_multiple_choice: true
-          }
-        }
+            multiple_choice_options: ['Happy', 'Sad', 'Undecided'],
+            allow_multiple_choice: true,
+          },
+        },
+        required: ['7', '8'],
       },
       form: [
         '3',
@@ -59,9 +46,9 @@ export default Route.extend({
         {
           type: 'section',
           title: 'Section 1',
-          items: [{ key: '2', type: 'radio' }, '1','5','6','7','8']
-        }
-      ]
+          items: [{ key: '2', type: 'radio' }, '1', '6', '7', '8'],
+        },
+      ],
     };
-  }
+  },
 });

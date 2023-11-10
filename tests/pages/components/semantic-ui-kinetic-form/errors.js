@@ -6,8 +6,8 @@ export const SemanticUIKineticFormErrors = {
   scope: '.semantic-ui-kinetic-form--errors',
   messages: collection({
     scope: '.list',
-    itemScope: 'li'
-  })
+    itemScope: 'li',
+  }),
 };
 
 export default PageObject.create(SemanticUIKineticFormErrors);

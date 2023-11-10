@@ -1,4 +1,4 @@
-<h3 class="ui dividing header">{{title}}</h3>
+<h3 class="ui dividing header">{{@title}}</h3>
 
 <div class="ui very relaxed divided items">
   {{yield}}
@@ -9,7 +9,7 @@
     <button class="ui inverted red button" type="button" {{action "saveAsIncomplete"}}>
       <i class="warning icon"></i>incomplete
     </button>
-    <button type="submit" class="ui inverted green button" disabled={{isInvalid}}>
+    <button type="submit" class="ui inverted green button" disabled={{@isInvalid}}>
       <i class="checkmark icon"></i>complete
     </button>
   </div>

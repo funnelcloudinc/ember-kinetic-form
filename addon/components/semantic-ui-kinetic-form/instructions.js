@@ -3,5 +3,5 @@ import layout from '../../templates/components/semantic-ui-kinetic-form/instruct
 
 export default KineticFormInstructionsComponent.extend({
   layout,
-  classNames: ['semantic-ui-kinetic-form--instructions', 'item']
+  classNames: ['semantic-ui-kinetic-form--instructions', 'item'],
 });

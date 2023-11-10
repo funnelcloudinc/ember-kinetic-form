@@ -1,7 +1,5 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import layout from '../../templates/components/kinetic-form/form';
-
-const { Component, get } = Ember;
 
 export default Component.extend({
   layout,
@@ -10,7 +8,7 @@ export default Component.extend({
 
   submit(evt) {
     evt.preventDefault();
-    get(this, 'onSubmit')();
+    this.onSubmit();
     return false;
-  }
+  },
 });

@@ -1,33 +1,33 @@
-{{#if showErrors}}
-  {{component errorComponent errors=changeset.errors}}
+{{#if this.showErrors}}
+  {{component this.errorComponent errors=this.changeset.errors}}
 {{/if}}
 
-{{#if decoratedDefinition.isPending}}
-  {{component loadingComponent}}
+{{#if this.decoratedDefinition.isPending}}
+  {{component this.loadingComponent}}
 {{else}}
-  {{#component formComponent 
-    changeset=changeset 
-    title=decoratedDefinition.schema.title 
-    isInvalid=isInvalid
-    hasPendingChanges=hasPendingChanges 
+  {{#component this.formComponent 
+    changeset=this.changeset 
+    title=this.decoratedDefinition.schema.title 
+    isInvalid=this.isInvalid
+    hasPendingChanges=this.hasPendingChanges 
     onSubmit=(action "submit")
-    readOnly=readOnly
+    readOnly=this.readOnly
   }}
-    {{#each properties as |field|}}
+    {{#each this.properties as |field|}}
       {{#component 
         field.componentName 
         field=field 
-        changeset=changeset 
-        error=(get changeset.error field.key) 
-        value=(get changeset field.key) 
+        changeset=this.changeset 
+        error=(get this.changeset.error field.key) 
+        value=(get this.changeset field.key) 
         update=(action "updateProperty" 
         field.key) as |item|
       }}
         {{component 
           item.componentName 
           field=item 
-          error=(get changeset.error item.key) 
-          value=(get changeset item.key) 
+          error=(get this.changeset.error item.key) 
+          value=(get this.changeset item.key) 
           update=(action "updateProperty" item.key)
         }}
       {{/component}}

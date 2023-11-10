@@ -1,7 +1,5 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import layout from '../../templates/components/kinetic-form/boolean';
-
-const { Component, get } = Ember;
 
 export default Component.extend({
   layout,
@@ -11,7 +9,7 @@ export default Component.extend({
 
   actions: {
     toggle() {
-      get(this, 'update')(!get(this, 'value'));
-    }
-  }
+      this.update(!this.value);
+    },
+  },
 });

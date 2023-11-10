@@ -3,5 +3,5 @@ import layout from '../../templates/components/semantic-ui-kinetic-form/radios';
 
 export default KineticFormRadiosComponent.extend({
   layout,
-  classNames: ['semantic-ui-kinetic-form--radios', 'item']
+  classNames: ['semantic-ui-kinetic-form--radios', 'item'],
 });
