@@ -15,8 +15,11 @@ export default Controller.extend({
       alert('fake sent');
     },
     update() {
-      return new Promise((resolve, reject) => {
+
+      // eslint-disable-next-line no-undef
+      return new Promise((resolve) => {
         setTimeout(() => {
+          // eslint-disable-next-line no-console
           console.log('update fired');
           return resolve();
         }, 3000);
