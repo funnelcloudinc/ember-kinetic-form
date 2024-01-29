@@ -9,4 +9,13 @@ export const KineticFormSection = {
   hasInTitle: contains('.header'),
 };
 
+const KineticFormWithSubSection = {
+  scope: '#test-parent > .semantic-ui-kinetic-form--section',
+  anchor: attribute('id', 'h2'),
+  title: text('h2'),
+  hasInTitle: contains('h2'),
+};
+const pageWithSubSection = PageObject.create(KineticFormWithSubSection);
+
 export default PageObject.create(KineticFormSection);
+export { pageWithSubSection };
