@@ -14,23 +14,14 @@
     readOnly=readOnly
   }}
     {{#each properties as |field|}}
-      {{#component 
+      {{component 
         field.componentName 
         field=field 
         changeset=changeset 
         error=(get changeset.error field.key) 
         value=(get changeset field.key) 
-        update=(action "updateProperty" 
-        field.key) as |item|
+        update=(action "updateProperty" field.key)
       }}
-        {{component 
-          item.componentName 
-          field=item 
-          error=(get changeset.error item.key) 
-          value=(get changeset item.key) 
-          update=(action "updateProperty" item.key)
-        }}
-      {{/component}}
     {{/each}}
   {{/component}}
 {{/if}}

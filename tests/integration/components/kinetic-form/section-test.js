@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
-import page from '../../../pages/components/kinetic-form/section';
+import page, { pageWithSubSection } from '../../../pages/components/kinetic-form/section';
 
 const { set } = Ember;
 
@@ -27,14 +27,45 @@ test('displays provides a linkable anchor', function(assert) {
   assert.equal(page.anchor, 'test-title');
 });
 
-test('yields field.items', function(assert) {
-  set(this, 'testField', {title: 'test-title', items: ['1', '2', '3']});
-  page.render(hbs`
-    {{#kinetic-form/section field=testField as |item|}}
-      test-{{item}}
-    {{/kinetic-form/section}}
-  `);
-  assert.ok(page.contains('test-1'), 'expected item 1 to be yielded');
-  assert.ok(page.contains('test-2'), 'expected item 2 to be yielded');
-  assert.ok(page.contains('test-3'), 'expected item 3 to be yielded');
+test('displays section items', function (assert) {
+  set(this, 'testField', {
+    title: 'test-title',
+    items: [
+      { key: '1', type: 'instructions', title: '1. Heat\n2. Pour', componentName: 'semantic-ui-kinetic-form/instructions' },
+      { key: '2', type: 'passfail', title: 'To be or not', required: false, componentName: 'semantic-ui-kinetic-form/passfail' },
+      { key: '3', type: 'boolean', title: 'Reality [] box', required: true, componentName: 'semantic-ui-kinetic-form/boolean' },
+    ]
+  });
+  set(this, 'noop', function() {})
+  page.render(hbs`{{kinetic-form/section field=testField update=noop}}`);
+
+  assert.ok(page.contains('1. Heat\n2. Pour'), 'expected form element 1 to be rendered');
+  assert.ok(page.contains('To be or not'), 'expected form element 2 to be rendered');
+  assert.ok(page.contains('Reality [] box'), 'expected form element 3 to be rendered');
+});
+
+test('displays sub-sections', function (assert) {
+  set(this, 'testField', {
+    title: 'test-title',
+    items: [
+      { key: '1', type: 'instructions', title: '1. Heat\n2. Pour', componentName: 'semantic-ui-kinetic-form/instructions' },
+      {
+        type: 'section',
+        title: 'sub-section',
+        required: false,
+        componentName: 'kinetic-form/section',
+        items: [
+          { key: '2', type: 'passfail', title: 'To be or not', required: false, componentName: 'semantic-ui-kinetic-form/passfail' },
+          { key: '3', type: 'boolean', title: 'Reality [] box', required: true, componentName: 'semantic-ui-kinetic-form/boolean' },
+        ]
+      }
+    ]
+  });
+  set(this, 'noop', function() {})
+  page.render(hbs`<div id="test-parent">{{kinetic-form/section field=testField update=noop}}</div>`);
+
+  assert.ok(pageWithSubSection.contains('1. Heat\n2. Pour'), 'expected form element 1 to be rendered');
+  assert.ok(pageWithSubSection.contains('sub-section'), 'expected sub-section title to be rendered');
+  assert.ok(pageWithSubSection.contains('To be or not'), 'expected form element 2 to be rendered');
+  assert.ok(pageWithSubSection.contains('Reality [] box'), 'expected form element 3 to be rendered');
 });
