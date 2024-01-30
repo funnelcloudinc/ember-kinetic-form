@@ -119,8 +119,20 @@ module('Unit | Schema Form Parser', function () {
         type: 'section',
         title: 'my-section',
         items: [
-          sinon.match({ key: '2', type: 'boolean', title: 'bar', required: false, componentName: 'kinetic-form/boolean' }),
-          sinon.match({ key: '3', type: 'boolean', title: 'baz', required: false, componentName: 'kinetic-form/boolean' }),
+          sinon.match({
+            key: '2',
+            type: 'boolean',
+            title: 'bar',
+            required: false,
+            componentName: 'kinetic-form/boolean',
+          }),
+          sinon.match({
+            key: '3',
+            type: 'boolean',
+            title: 'baz',
+            required: false,
+            componentName: 'kinetic-form/boolean',
+          }),
         ],
       }),
     ]);
@@ -195,96 +207,143 @@ module('Unit | Schema Form Parser', function () {
     ]);
   });
 
-  test('parses sub-sections and their names', function() {
+  test('parses sub-sections and their names', function () {
     let subject = SchemaFormParser.create({
       lookupComponentName: (type) => `kinetic-form/${type}`,
       schema: {
-        type: "object",
-        title: "Get refreshed!",
-        required: ["3"],
+        type: 'object',
+        title: 'Get refreshed!',
+        required: ['3'],
         properties: {
-          1: { formtype: "instructions", type: "instructions", section: "following", title: "1. Heat\n2. Pour" },
-          2: { formtype: "passfail", type: "passfail", title: "To be or not", required: false },
-          3: { formtype: "textarea", type: "string", section: "sub-section", title: "Let's see what happens", required: true }
-        }
+          1: {
+            formtype: 'instructions',
+            type: 'instructions',
+            section: 'following',
+            title: '1. Heat\n2. Pour',
+          },
+          2: {
+            formtype: 'passfail',
+            type: 'passfail',
+            title: 'To be or not',
+            required: false,
+          },
+          3: {
+            formtype: 'textarea',
+            type: 'string',
+            section: 'sub-section',
+            title: "Let's see what happens",
+            required: true,
+          },
+        },
       },
       form: [
-        { key: "2", type: "passfail" },
-        { 
-          type: "section",
-          title: "following",
+        { key: '2', type: 'passfail' },
+        {
+          type: 'section',
+          title: 'following',
           items: [
-            { key: "1", type: "instructions" },
+            { key: '1', type: 'instructions' },
             {
-              type: "section",
-              title: "sub-section",
-              items: [{ key: "3", type: "textarea" }]
-            }
-          ]
-        }
-      ]
+              type: 'section',
+              title: 'sub-section',
+              items: [{ key: '3', type: 'textarea' }],
+            },
+          ],
+        },
+      ],
     });
 
     sinon.assert.match(subject.get('elements'), [
-      sinon.match({ key: '2', type: 'passfail', title: 'To be or not', required: false, componentName: 'kinetic-form/passfail' }),
+      sinon.match({
+        key: '2',
+        type: 'passfail',
+        title: 'To be or not',
+        required: false,
+        componentName: 'kinetic-form/passfail',
+      }),
       sinon.match({
         type: 'section',
         title: 'following',
         required: false,
         componentName: 'kinetic-form/section',
         items: [
-          sinon.match({ key: '1', type: 'instructions', title: '1. Heat\n2. Pour', required: false, componentName: 'kinetic-form/instructions' }),
+          sinon.match({
+            key: '1',
+            type: 'instructions',
+            title: '1. Heat\n2. Pour',
+            required: false,
+            componentName: 'kinetic-form/instructions',
+          }),
           sinon.match({
             type: 'section',
             title: 'sub-section',
             required: false,
             componentName: 'kinetic-form/section',
             items: [
-              sinon.match({ key: '3', type: 'textarea', title: 'Let\'s see what happens', required: true, componentName: 'kinetic-form/textarea' }),
-            ]
-          })
+              sinon.match({
+                key: '3',
+                type: 'textarea',
+                title: "Let's see what happens",
+                required: true,
+                componentName: 'kinetic-form/textarea',
+              }),
+            ],
+          }),
         ],
       }),
     ]);
   });
 
-  test('parses deep section nesting', function() {
+  test('parses deep section nesting', function () {
     let subject = SchemaFormParser.create({
       lookupComponentName: (type) => `kinetic-form/${type}`,
       schema: {
-        type: "object",
-        title: "Get refreshed!",
-        required: ["3"],
+        type: 'object',
+        title: 'Get refreshed!',
+        required: ['3'],
         properties: {
-          1: { formtype: "instructions", type: "instructions", section: "following", title: "1. Heat\n2. Pour" },
-          2: { formtype: "passfail", type: "passfail", title: "To be or not", required: false },
-          3: { formtype: "textarea", type: "string", section: "sub-section", title: "Let's see what happens", required: true }
-        }
+          1: {
+            formtype: 'instructions',
+            type: 'instructions',
+            section: 'following',
+            title: '1. Heat\n2. Pour',
+          },
+          2: {
+            formtype: 'passfail',
+            type: 'passfail',
+            title: 'To be or not',
+            required: false,
+          },
+          3: {
+            formtype: 'textarea',
+            type: 'string',
+            section: 'sub-section',
+            title: "Let's see what happens",
+            required: true,
+          },
+        },
       },
       form: [
-        { 
-          type: "section",
-          title: "following",
+        {
+          type: 'section',
+          title: 'following',
           items: [
-            { key: "1", type: "instructions" },
+            { key: '1', type: 'instructions' },
             {
-              type: "section",
-              title: "sub-section",
+              type: 'section',
+              title: 'sub-section',
               items: [
-                { key: "3", type: "textarea" },
+                { key: '3', type: 'textarea' },
                 {
-                  type: "section",
-                  title: "deep-sub-section",
-                  items: [
-                    { key: "2", type: "passfail" }
-                  ]
-                }
-    
-              ]
-            }
-          ]
-        }
-      ]
+                  type: 'section',
+                  title: 'deep-sub-section',
+                  items: [{ key: '2', type: 'passfail' }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
 
     sinon.assert.match(subject.get('elements'), [
@@ -294,25 +353,43 @@ module('Unit | Schema Form Parser', function () {
         required: false,
         componentName: 'kinetic-form/section',
         items: [
-          sinon.match({ key: '1', type: 'instructions', title: '1. Heat\n2. Pour', required: false, componentName: 'kinetic-form/instructions' }),
+          sinon.match({
+            key: '1',
+            type: 'instructions',
+            title: '1. Heat\n2. Pour',
+            required: false,
+            componentName: 'kinetic-form/instructions',
+          }),
           sinon.match({
             type: 'section',
             title: 'sub-section',
             required: false,
             componentName: 'kinetic-form/section',
             items: [
-              sinon.match({ key: '3', type: 'textarea', title: 'Let\'s see what happens', required: true, componentName: 'kinetic-form/textarea' }),
+              sinon.match({
+                key: '3',
+                type: 'textarea',
+                title: "Let's see what happens",
+                required: true,
+                componentName: 'kinetic-form/textarea',
+              }),
               sinon.match({
                 type: 'section',
                 title: 'deep-sub-section',
                 required: false,
                 componentName: 'kinetic-form/section',
                 items: [
-                  sinon.match({ key: '2', type: 'passfail', title: 'To be or not', required: false, componentName: 'kinetic-form/passfail' }),
-                ]
-              })
-            ]
-          })
+                  sinon.match({
+                    key: '2',
+                    type: 'passfail',
+                    title: 'To be or not',
+                    required: false,
+                    componentName: 'kinetic-form/passfail',
+                  }),
+                ],
+              }),
+            ],
+          }),
         ],
       }),
     ]);

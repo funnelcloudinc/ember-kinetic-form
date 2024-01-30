@@ -39,8 +39,8 @@ export default Route.extend({
               type: 'section',
               title: 'Nested Section',
               items: ['7', '8'],
-            }
-          ]
+            },
+          ],
         },
       ],
     };

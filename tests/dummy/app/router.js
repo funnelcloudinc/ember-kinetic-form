@@ -10,5 +10,5 @@ Router.map(function () {
   this.route('kinetic-form');
   this.route('semantic-ui-kinetic-form');
   this.route('override-form');
-  this.route('nested-section-form');  
+  this.route('nested-section-form');
 });
