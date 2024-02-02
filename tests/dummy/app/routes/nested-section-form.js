@@ -17,7 +17,7 @@ export default Route.extend({
           },
           7: {
             type: 'instructions',
-            title: 'Here are my instructions',
+            title: 'Here are my instructions\nStep 1 - - -\nStep 2 - - -',
           },
           8: {
             type: 'multiplechoice',
@@ -26,7 +26,7 @@ export default Route.extend({
             allow_multiple_choice: true,
           },
         },
-        required: ['7', '8'],
+        required: ['8'],
       },
       form: [
         { key: '4', type: 'boolean' },
