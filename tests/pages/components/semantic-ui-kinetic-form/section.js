@@ -1,4 +1,5 @@
 import PageObject from 'ember-cli-page-object';
+import { SemanticUIKineticFormBoolean } from './boolean';
 
 const { attribute, contains, text } = PageObject;
 
@@ -14,6 +15,7 @@ const KineticFormWithSubSection = {
   anchor: attribute('id', 'h2'),
   title: text('h2'),
   hasInTitle: contains('h2'),
+  booleanField: SemanticUIKineticFormBoolean,
 };
 const pageWithSubSection = PageObject.create(KineticFormWithSubSection);
 
