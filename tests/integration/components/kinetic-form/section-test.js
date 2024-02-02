@@ -1,7 +1,9 @@
 import { set } from '@ember/object';
+import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
+import sinon from 'sinon';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import page, {
   pageWithSubSection,
@@ -53,7 +55,7 @@ module('Integration | Component | kinetic form/section', function (hooks) {
     });
     set(this, 'noop', function () {});
     await render(
-      hbs`{{kinetic-form/section field=this.testField update=this.noop}}`
+      hbs`{{kinetic-form/section field=this.testField update=this.noop updateAction=this.noop}}`
     );
 
     assert.ok(
@@ -106,7 +108,7 @@ module('Integration | Component | kinetic form/section', function (hooks) {
     });
     set(this, 'noop', function () {});
     await render(
-      hbs`<div id="test-parent">{{kinetic-form/section field=this.testField update=this.noop}}</div>`
+      hbs`<div id="test-parent">{{kinetic-form/section field=this.testField update=this.noop updateAction=this.noop}}</div>`
     );
 
     assert.ok(
@@ -124,6 +126,43 @@ module('Integration | Component | kinetic form/section', function (hooks) {
     assert.ok(
       pageWithSubSection.contains('Reality [] box'),
       'expected form element 3 to be rendered'
+    );
+  });
+
+  test('passes through the update action', async function (assert) {
+    const updateActionSpy = sinon.spy();
+    set(this, 'updateAction', updateActionSpy);
+    set(this, 'noop', function () {});
+    set(this, 'testField', {
+      title: 'test-title',
+      items: [
+        {
+          type: 'section',
+          title: 'sub-section',
+          required: false,
+          componentName: 'kinetic-form/section',
+          items: [
+            {
+              key: '1',
+              type: 'boolean',
+              title: 'Is it complete',
+              required: true,
+              componentName: 'kinetic-form/boolean',
+            },
+          ],
+        },
+      ],
+    });
+
+    await render(hbs`<div id="test-parent">{{kinetic-form/section field=this.testField updateAction=this.updateAction update=this.noop}}</div>`);
+
+    run(() => pageWithSubSection.booleanField.toggle());
+    await settled();
+
+    sinon.assert.calledWith(
+      updateActionSpy,
+      '1', // key
+      true,  // value
     );
   });
 });

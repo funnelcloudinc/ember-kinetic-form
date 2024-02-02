@@ -3,9 +3,11 @@
 {{#each @field.items as |item|}}
   {{component 
     item.componentName 
-    field=item 
-    error=(get this.changeset.error item.key) 
-    value=(get this.changeset item.key) 
-    update=(action this.update item.key)
+    field=item
+    changeset=@changeset
+    updateAction=@updateAction
+    error=(get @changeset.error item.key) 
+    value=(get @changeset item.key) 
+    update=(action @updateAction item.key)
   }}
 {{/each}}
