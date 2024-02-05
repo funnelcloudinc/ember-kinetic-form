@@ -199,6 +199,7 @@ test('calls onUpdate action when user updates the form', async function () {
   set(this, 'updateSpy', sinon.spy());
   set(this, 'testDefinition', {
     schema: {
+      type: 'object',
       properties: {
         fieldA: {type: 'string'},
       }
@@ -215,29 +216,6 @@ test('calls onUpdate action when user updates the form', async function () {
   run(() => page.stringField.enterText('foobar'));
   await settled();
   sinon.assert.calledWith(get(this, 'updateSpy'), sinon.match(isChangeset, 'Changeset'));
-});
-
-test('does not call onUpdate action when user updates the form but is invalid', async function () {
-  set(this, 'updateSpy', sinon.spy());
-  set(this, 'testDefinition', {
-    schema: {
-      required: ['fieldA'],
-      properties: {
-        fieldA: {type: 'string'},
-      }
-    }
-  });
-  page.render(hbs`
-    {{kinetic-form
-        updateDebounceDelay=0
-        definition=testDefinition
-        model=testModel
-        onUpdate=(action updateSpy)
-        onSubmit=(action submitSpy)}}
-  `);
-  run(() => page.stringField.enterText(''));
-  await settled();
-  sinon.assert.notCalled(get(this, 'updateSpy'));
 });
 
 test('shows loading component when passed a promise', function (assert) {

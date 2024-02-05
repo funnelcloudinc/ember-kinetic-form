@@ -29,9 +29,18 @@ export function normalizeFormElement(element, properties, requiredKeys, lookup) 
 export function* normalizeFormElements(form, properties, requiredKeys, lookup) {
   function* mapProperties(items) {
     for (let item of items) {
-      let element = typeOf(item) === 'string' ? { key: item } : item;
-      yield normalizeFormElement(element, properties, requiredKeys, lookup);
-      if (element.key) { propertiesAccountedFor[element.key] = true; }
+      // Identifies the non-base cases,
+      // i.e. non-empty sections with items that still need to be processed
+      if (item.items && (item.items[0] && !item.items[0].componentName)) {
+        let recItems = [...mapProperties(item.items)];
+        yield* mapProperties([Object.assign({}, item, { items: recItems })]);  
+      } else {
+        let element = typeOf(item) === 'string' ? { key: item } : item;
+        yield normalizeFormElement(element, properties, requiredKeys, lookup);
+        if (element.key) {
+          propertiesAccountedFor[element.key] = true;
+        }  
+      }
     }
   }
   let propertiesAccountedFor = {};

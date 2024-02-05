@@ -12,6 +12,7 @@ export default Controller.extend({
       alert('fake sent');
     },
     update() {
+      // eslint-disable-next-line no-console
       console.log('update fired');
     }
   }
