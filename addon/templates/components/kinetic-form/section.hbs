@@ -1,5 +1,13 @@
 <h2 id={{this.anchor}}>{{@field.title}}</h2>
 
 {{#each @field.items as |item|}}
-  {{yield item}}
+  {{component 
+    item.componentName 
+    field=item
+    changeset=@changeset
+    updateAction=@updateAction
+    error=(get @changeset.error item.key) 
+    value=(get @changeset item.key) 
+    update=(action @updateAction item.key)
+  }}
 {{/each}}
