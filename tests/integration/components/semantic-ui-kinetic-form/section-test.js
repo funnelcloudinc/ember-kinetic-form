@@ -61,7 +61,7 @@ module(
       });
       set(this, 'noop', function () {});
       await render(
-        hbs`{{semantic-ui-kinetic-form/section field=this.testField update=this.noop}}`
+        hbs`{{semantic-ui-kinetic-form/section field=this.testField update=this.noop updateAction=this.noop}}`
       );
 
       assert.ok(
@@ -114,7 +114,7 @@ module(
       });
       set(this, 'noop', function () {});
       await render(
-        hbs`<div id="test-parent">{{semantic-ui-kinetic-form/section field=this.testField update=this.noop}}</div>`
+        hbs`<div id="test-parent">{{semantic-ui-kinetic-form/section field=this.testField update=this.noop updateAction=this.noop}}</div>`
       );
 
       assert.ok(
