@@ -154,7 +154,9 @@ module('Integration | Component | kinetic form/section', function (hooks) {
       ],
     });
 
-    await render(hbs`<div id="test-parent">{{kinetic-form/section field=this.testField updateAction=this.updateAction update=this.noop}}</div>`);
+    await render(
+      hbs`<div id="test-parent">{{kinetic-form/section field=this.testField updateAction=this.updateAction update=this.noop}}</div>`
+    );
 
     run(() => pageWithSubSection.booleanField.toggle());
     await settled();
@@ -162,7 +164,7 @@ module('Integration | Component | kinetic form/section', function (hooks) {
     sinon.assert.calledWith(
       updateActionSpy,
       '1', // key
-      true,  // value
+      true // value
     );
   });
 });

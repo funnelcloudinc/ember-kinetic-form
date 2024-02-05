@@ -159,17 +159,19 @@ module(
           },
         ],
       });
-  
-      await render(hbs`<div id="test-parent">{{semantic-ui-kinetic-form/section field=this.testField updateAction=this.updateAction update=this.noop}}</div>`);
-  
+
+      await render(
+        hbs`<div id="test-parent">{{semantic-ui-kinetic-form/section field=this.testField updateAction=this.updateAction update=this.noop}}</div>`
+      );
+
       run(() => pageWithSubSection.booleanField.toggle());
       await settled();
-  
+
       sinon.assert.calledWith(
         updateActionSpy,
         '1', // key
-        true,  // value
+        true // value
       );
-    });  
+    });
   }
 );
