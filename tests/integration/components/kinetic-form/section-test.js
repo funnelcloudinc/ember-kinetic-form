@@ -129,7 +129,7 @@ module('Integration | Component | kinetic form/section', function (hooks) {
     );
   });
 
-  test('passes through the update action', async function (assert) {
+  test('passes through the update action', async function () {
     const updateActionSpy = sinon.spy();
     set(this, 'updateAction', updateActionSpy);
     set(this, 'noop', function () {});
