@@ -291,4 +291,29 @@ module('Integration | Component | kinetic form', function (hooks) {
     );
     assert.ok(page.form.isHidden, 'expected form component to be hidden');
   });
+
+  test('displays validation errors on attempt to submit an invalid form', async function (assert) {
+    set(this, 'testDefinition', {
+      schema: {
+        type: 'object',
+        required: ['textInput', 'checkbox'],
+        properties: {
+          textInput: { type: 'string' },
+          checkbox: { type: 'boolean' },
+        },
+      },
+    });
+    await render(hbs`
+      {{kinetic-form
+          definition=this.testDefinition
+          model=this.testModel}}
+    `);
+    await run(() => page.submit());
+
+    assert.equal(
+      page.errorsSection.messages().count,
+      2,
+      'expected two errors to be displayed'
+    );
+  })
 });
