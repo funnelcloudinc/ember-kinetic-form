@@ -310,10 +310,10 @@ module('Integration | Component | kinetic form', function (hooks) {
     `);
     await run(() => page.submit());
 
-    assert.equal(
+    assert.strictEqual(
       page.errorsSection.messages().count,
       2,
       'expected two errors to be displayed'
     );
-  })
+  });
 });
