@@ -97,5 +97,8 @@
   "volta": {
     "node": "16.20.2",
     "yarn": "1.22.17"
+  },
+  "resolutions": {
+    "isbinaryfile": "5.0.0"
   }
 }
