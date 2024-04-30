@@ -8,7 +8,7 @@ export const SemanticUIKineticFormPassFail = {
   hasInTitle: contains('label'),
   isPassed: hasClass('green', '.check'),
   isFailed: hasClass('red', '.close'),
-  isDocStatusControl: hasClass('warning', '.content'),
+  isDocStatusControl: hasClass('warning', ' > div'),
   hasError: hasClass('error', '.field'),
   setPassed: clickable('.check'),
   setFailed: clickable('.close'),
