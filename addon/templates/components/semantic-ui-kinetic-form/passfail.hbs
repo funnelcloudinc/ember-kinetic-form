@@ -4,8 +4,7 @@
   }
 </style>
 
-<div class={{if @field.informs_document_status 'ui warning message'}}
-  style={{html-safe (if @field.informs_document_status 'display:block;width:100%')}}>
+<div class={{if @field.informs_document_status 'ui warning message'}} style="display:block;width:100%">
   <div class="field {{if @error 'error'}} {{if @field.required 'required'}}">
     <label>
       {{#if @field.informs_document_status}}
