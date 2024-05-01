@@ -1,11 +1,22 @@
-<div class="middle aligned content">
+<style>
+  .ui.basic.buttons .ui.button.passfail:not(.active) {
+    background: white !important;
+  }
+</style>
+
+<div class={{if field.informs_document_status 'ui warning message'}} style="width:100%;display:block;">
   <div class="field {{if error 'error'}} {{if field.required 'required'}}">
-    <label>{{field.title}}</label>
+    <label>
+      {{#if field.informs_document_status}}
+        <i class="warning sign icon"></i>
+      {{/if}}
+      {{field.title}}
+    </label>
     <div class="ui big fluid basic icon buttons">
-      <div class="ui {{if (eq value true) 'active'}} button" {{action update true}}>
+      <div class="ui {{if (eq value true) 'active'}} button passfail" {{action update true}}>
         <i class="{{if (eq value true) 'green'}} check icon big"></i>
       </div>
-      <div class="ui {{if (eq value false) 'active'}} button" {{action update false}}>
+      <div class="ui {{if (eq value false) 'active'}} button passfail" {{action update false}}>
         <i class="{{if (eq value false) 'red'}} close icon big"></i>
       </div>
     </div>

@@ -44,14 +44,16 @@ export default Route.extend({
           '8': {
             type: 'multiplechoice',
             title: 'Choose many',
-            multiple_choice_options: [
-              'Happy',
-              'Sad',
-              "Undecided"
-            ],
+            multiple_choice_options: ['Happy', 'Sad', 'Undecided'],
             allow_multiple_choice: true
+          },
+          9: {
+            type: 'passfail',
+            title: 'For Document Status - does it Pass or fail',
+            informs_document_status: true
           }
-        }
+        },
+        required: ['7', '8', '9']
       },
       form: [
         '3',
@@ -59,7 +61,7 @@ export default Route.extend({
         {
           type: 'section',
           title: 'Section 1',
-          items: [{ key: '2', type: 'radio' }, '1','5','6','7','8']
+          items: [{ key: '2', type: 'radio' }, '1', '5', '6', '7', '8', '9']
         }
       ]
     };
