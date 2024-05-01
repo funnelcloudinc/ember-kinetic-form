@@ -14,5 +14,6 @@ module.exports = {
     'no-curly-component-invocation': false,
     'require-button-type': false,
     'require-input-label': false,
+    'no-forbidden-elements': false,
   },
 };
