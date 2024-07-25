@@ -1,0 +1,51 @@
+<style>
+  .ui.data-key.label {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    font-weight: normal;
+  }
+  .ui.data-key.label {
+    position: relative;
+    top: -4px;
+  }
+</style>
+
+<div class="{{this.wrapperClass}}" style="display:block;width:100%">
+  <div
+    class="field
+      {{if error 'error'}}
+      {{if this.outOfBounds 'error'}}
+      {{if field.required 'required'}}"
+  >
+    <label>
+      {{#if field.informs_document_status}}
+        <i class="{{if this.outOfBounds 'cancel' 'warning'}} sign icon"></i>
+      {{/if}}
+      {{field.title}}
+      {{#if (and field.lower_control_limit field.upper_control_limit)}}
+        <small>(LCL: {{field.lower_control_limit}} / UCL: {{field.upper_control_limit}})</small>
+      {{else if field.lower_control_limit}}
+        <small>(LCL: {{field.lower_control_limit}})</small>
+      {{else if field.upper_control_limit}}
+        <small>(UCL: {{field.upper_control_limit}})</small>
+      {{/if}}
+    </label>
+    <div class="ui right labeled input">
+      <input
+        type="number"
+        step="any"
+        value={{value}}
+        onchange={{action "updateNumber" value="target.value"}}
+        oninput={{action "updateNumber" value="target.value"}}
+        style="background: white;"
+      />
+      <div class="ui basic label">
+        {{if field.unit_of_measure field.unit_of_measure "--"}}
+      </div>
+    </div>
+    {{!-- For previewing purposes only (lmv-collab) --}}
+    <div class="ui data-key label" style="display: none;">
+      {{field.data_key}}
+    </div>
+  </div>
+</div>

@@ -1,6 +1,4 @@
-import Ember from 'ember';
-
-const { Route } = Ember;
+import Route from '@ember/routing/route';
 
 export default Route.extend({
   model() {
@@ -9,61 +7,71 @@ export default Route.extend({
         title: 'foobar',
         type: 'object',
         properties: {
-          '1': {
+          1: {
             type: 'boolean',
-            title: 'foo'
+            title: 'foo',
           },
-          '2': {
-            type: 'boolean',
-            title: 'bar craig'
-          },
-          '3': {
-            type: 'boolean',
-            title: 'baz'
-          },
-          '4': {
-            type: 'boolean',
-            title: 'frotz'
-          },
-          '5': {
-            type: 'select',
-            title: 'Select one',
-            options: [
-              'jam',
-              'honey'
-            ]
-          },
-          '6': {
+          2: {
             type: 'passfail',
-            title: 'Pass or fail'
+            title: 'Pass or fail',
           },
-          '7': {
+          3: {
+            type: 'passfail',
+            title: 'For Document Status - does it Pass or fail',
+            informs_document_status: true,
+          },
+          4: {
             type: 'instructions',
-            title: 'Here are my instructions'
+            title: 'Here are my instructions',
           },
-          '8': {
+          5: {
             type: 'multiplechoice',
             title: 'Choose many',
             multiple_choice_options: ['Happy', 'Sad', 'Undecided'],
-            allow_multiple_choice: true
+            allow_multiple_choice: true,
+          },
+          6: {
+            type: 'measurement',
+            title: 'Measurement',
+            lower_control_limit: 1000,
+            unit_of_measure: 'kg',
+            informs_document_status: false,
+            data_key: 'Measurement-123',
+          },
+          7: {
+            type: 'measurement',
+            title: 'Measurement',
+            lower_control_limit: 10,
+            upper_control_limit: 20,
+            unit_of_measure: 'mm',
+            informs_document_status: true,
+            data_key: 'Measurement-456',
+          },
+          8: {
+            type: 'measurement',
+            title: 'Measurement',
+            upper_control_limit: 20,
+            unit_of_measure: 'mm',
+            informs_document_status: true,
+            data_key: 'Measurement-789',
           },
           9: {
-            type: 'passfail',
-            title: 'For Document Status - does it Pass or fail',
-            informs_document_status: true
-          }
+            type: 'measurement',
+            title: 'Measurement',
+            unit_of_measure: 'mm',
+            informs_document_status: false,
+            data_key: 'Measurement-000',
+          },
         },
-        required: ['7', '8', '9']
+        required: ['7', '2'],
       },
       form: [
-        '3',
-        { key: '4', type: 'boolean' },
         {
           type: 'section',
           title: 'Section 1',
-          items: [{ key: '2', type: 'radio' }, '1', '5', '6', '7', '8', '9']
-        }
-      ]
+          items: ['9', '6', '7', '8', '1', '2', '3', '4', '5'],
+        },
+      ],
     };
-  }
+  },
 });
