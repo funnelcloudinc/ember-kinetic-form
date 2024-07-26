@@ -15,5 +15,5 @@ export default KineticFormComponent.extend({
   passfailComponent: 'semantic-ui-kinetic-form/passfail',
   instructionsComponent: 'semantic-ui-kinetic-form/instructions',
   multiplechoiceComponent: 'semantic-ui-kinetic-form/multiplechoice',
-  measurementComponent: 'semantic-ui-kinetic-form/measurement'
+  measurementComponent: 'semantic-ui-kinetic-form/measurement',
 });
