@@ -33,6 +33,7 @@
     <div class="ui right labeled input">
       <input
         type="number"
+        step="any"
         value={{@value}}
         onchange={{action "updateNumber" value="target.value"}}
         oninput={{action "updateNumber" value="target.value"}}
