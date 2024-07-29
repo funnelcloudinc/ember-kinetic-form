@@ -36,6 +36,7 @@ export default Route.extend({
             lower_control_limit: 1000,
             unit_of_measure: 'kg',
             informs_document_status: false,
+            data_key: 'Measurement-123',
           },
           7: {
             type: 'measurement',
@@ -44,6 +45,7 @@ export default Route.extend({
             upper_control_limit: 20,
             unit_of_measure: 'mm',
             informs_document_status: true,
+            data_key: 'Measurement-456',
           },
           8: {
             type: 'measurement',
@@ -51,12 +53,14 @@ export default Route.extend({
             upper_control_limit: 20,
             unit_of_measure: 'mm',
             informs_document_status: true,
+            data_key: 'Measurement-789',
           },
           9: {
             type: 'measurement',
             title: 'Measurement',
             unit_of_measure: 'mm',
             informs_document_status: false,
+            data_key: 'Measurement-000',
           },
         },
         required: ['7', '2'],

@@ -1,3 +1,15 @@
+<style>
+  .ui.data-key.label {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    font-weight: normal;
+  }
+  .ui.message .ui.data-key.label {
+    position: relative;
+    top: -4px;
+  }
+</style>
+
 <div class="{{this.wrapperClass}}" style="display:block;width:100%">
   <div
     class="field
@@ -29,6 +41,10 @@
       <div class="ui basic label">
         {{if @field.unit_of_measure @field.unit_of_measure "--"}}
       </div>
+    </div>
+    {{!-- For previewing purposes only (lmv-collab) --}}
+    <div class="ui data-key label" style="display: none;">
+      {{@field.data_key}}
     </div>
   </div>
 </div>
