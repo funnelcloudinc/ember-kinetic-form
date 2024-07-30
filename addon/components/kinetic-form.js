@@ -35,6 +35,7 @@ export default Component.extend({
   passfailComponent: 'kinetic-form/passfail',
   instructionsComponent: 'kinetic-form/instructions',
   multiplechoiceComponent: 'kinetic-form/multiplechoice',
+  measurementComponent: 'kinetic-form/measurement',
 
   properties: reads('schemaParser.elements'),
 
