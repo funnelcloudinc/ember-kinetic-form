@@ -23,11 +23,11 @@
       {{/if}}
       {{@field.title}}
       {{#if (and @field.lower_control_limit @field.upper_control_limit)}}
-        <small>(LCL: {{@field.lower_control_limit}} <i class="arrows alternate horizontal icon"></i>UCL: {{@field.upper_control_limit}})</small>
+        <small>(LCL: {{@field.lower_control_limit}} / UCL: {{@field.upper_control_limit}})</small>
       {{else if @field.lower_control_limit}}
-        <small>(LCL<i class="angle right icon" style="margin-right: -4px;"></i>= {{@field.lower_control_limit}})</small>
+        <small>(LCL: {{@field.lower_control_limit}})</small>
       {{else if @field.upper_control_limit}}
-        <small>(UCL<i class="angle left icon" style="margin-right: -4px;"></i>= {{@field.upper_control_limit}})</small>
+        <small>(UCL: {{@field.upper_control_limit}})</small>
       {{/if}}
     </label>
     <div class="ui right labeled input">
