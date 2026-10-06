@@ -95,7 +95,7 @@
     "configPath": "tests/dummy/config"
   },
   "volta": {
-    "node": "16.20.2",
+    "node": "22.23.2",
     "yarn": "1.22.17"
   },
   "resolutions": {
