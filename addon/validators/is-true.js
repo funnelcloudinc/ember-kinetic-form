@@ -1,5 +1,5 @@
-export default function validateIsTrue() {
+export default function validateIsTrue(name) {
   return (key, newValue) => {
-    return newValue === true || `${key} must be selected`;
+    return newValue === true || `${name || key} must be selected`;
   };
 }
