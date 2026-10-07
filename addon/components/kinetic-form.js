@@ -1,6 +1,7 @@
 import { alias, reads } from '@ember/object/computed';
 import Component from '@ember/component';
 import { computed, set, get } from '@ember/object';
+import { scheduleOnce } from '@ember/runloop';
 import { A } from '@ember/array';
 import { resolve } from 'rsvp';
 import ObjectProxy from '@ember/object/proxy';
@@ -9,7 +10,7 @@ import { task } from 'ember-concurrency';
 import layout from '../templates/components/kinetic-form';
 import Changeset from 'ember-changeset';
 import lookupValidator from 'ember-changeset-validations';
-import validatorsFor from '../-validators-for';
+import validatorsFor, { DEFAULT_MESSAGES } from '../-validators-for';
 import SchemaFormParser from '../-schema-form-parser';
 
 const DEFAULT_COMPONENT_NAME_PROP = 'stringComponent';
@@ -22,6 +23,10 @@ export default Component.extend({
 
   showErrors: false,
   readOnly: false,
+
+  // Hosts override these to translate. Each message takes the field's title.
+  validationMessages: DEFAULT_MESSAGES,
+  errorsTitle: 'There were some errors with your submission',
 
   loadingComponent: 'kinetic-form/loading',
   errorComponent: 'kinetic-form/errors',
@@ -42,10 +47,11 @@ export default Component.extend({
 
   isInvalid: alias('changeset.isInvalid'),
 
-  validators: computed('properties.@each.required', {
+  validators: computed('properties.@each.required', 'validationMessages', {
     get() {
       let validators = {};
       let properties = this.properties;
+      let messages = this.validationMessages;
 
       function buildValidators(items = []) {
         for (let item of items) {
@@ -55,7 +61,7 @@ export default Component.extend({
           if (!item.key) {
             continue;
           }
-          const validator = validatorsFor(item);
+          const validator = validatorsFor(item, messages);
           if (validator) {
             validators[item.key] = validator;
           }
@@ -134,8 +140,20 @@ export default Component.extend({
         return true;
       }
       set(this, 'showErrors', true);
+      scheduleOnce('afterRender', this, this.revealErrors);
       return false;
     });
+  },
+
+  // A single problem scrolls to the field itself; several scroll to the
+  // summary at the top so the whole list is in view.
+  revealErrors() {
+    if (!this.element) return;
+    const errors = this.changeset.errors;
+    const target =
+      (errors.length === 1 && this.element.querySelector('.has-error')) ||
+      this.element.querySelector('.kinetic-form--errors');
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   },
 
   handleFormChanges({ key, value }) {

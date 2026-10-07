@@ -1,5 +1,5 @@
 {{#if this.showErrors}}
-  {{component this.errorComponent errors=this.changeset.errors}}
+  {{component this.errorComponent errors=this.changeset.errors title=this.errorsTitle}}
 {{/if}}
 
 {{#if this.decoratedDefinition.isPending}}

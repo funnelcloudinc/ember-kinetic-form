@@ -1,5 +1,7 @@
-export default function validateIsTrue() {
+const defaultMessage = (name) => `${name} must be selected`;
+
+export default function validateIsTrue(name, message = defaultMessage) {
   return (key, newValue) => {
-    return newValue === true || `${key} must be selected`;
+    return newValue === true || message(name || key);
   };
 }

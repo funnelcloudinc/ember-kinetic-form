@@ -26,4 +26,14 @@ module('Unit | Validators | is-true', function () {
     );
     assert.ok(subject('foo', true), 'expected return value to be true');
   });
+
+  test('names the field when given a name', function (assert) {
+    const subject = validateIsTrue('Ball screws greased');
+
+    assert.strictEqual(
+      subject('23', false),
+      'Ball screws greased must be selected'
+    );
+    assert.true(subject('23', true));
+  });
 });
