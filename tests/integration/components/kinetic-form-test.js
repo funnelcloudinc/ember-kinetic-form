@@ -316,4 +316,36 @@ module('Integration | Component | kinetic form', function (hooks) {
       'expected two errors to be displayed'
     );
   });
+
+  test('drops the validation errors when given another model', async function (assert) {
+    set(this, 'testDefinition', {
+      schema: {
+        type: 'object',
+        required: ['textInput'],
+        properties: { textInput: { type: 'string' } },
+      },
+    });
+    await render(hbs`
+      {{kinetic-form
+          definition=this.testDefinition
+          model=this.testModel}}
+    `);
+    await run(() => page.submit());
+    assert.ok(page.errorsSection.isPresent, 'errors shown for the first model');
+
+    const first = this.testModel;
+    set(this, 'testModel', EmberObject.create());
+    await settled();
+    assert.notOk(
+      page.errorsSection.isPresent,
+      'errors gone for the next model'
+    );
+
+    set(this, 'testModel', first);
+    await settled();
+    assert.notOk(
+      page.errorsSection.isPresent,
+      'and they stay gone when the first model comes back'
+    );
+  });
 });

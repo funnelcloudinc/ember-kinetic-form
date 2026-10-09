@@ -47,6 +47,20 @@ export default Component.extend({
 
   isInvalid: alias('changeset.isInvalid'),
 
+  // The summary belongs to the changeset it was raised for; a model swap,
+  // including back to the same model, builds a new one.
+  errorsVisible: computed(
+    'showErrors',
+    'changeset',
+    '_errorsChangeset',
+    function () {
+      return (
+        this.showErrors &&
+        (!this._errorsChangeset || this._errorsChangeset === this.changeset)
+      );
+    }
+  ),
+
   validators: computed('properties.@each.required', 'validationMessages', {
     get() {
       let validators = {};
@@ -139,6 +153,7 @@ export default Component.extend({
       if (changeset.isValid) {
         return true;
       }
+      set(this, '_errorsChangeset', changeset);
       set(this, 'showErrors', true);
       scheduleOnce('afterRender', this, this.revealErrors);
       return false;
